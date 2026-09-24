@@ -1,22 +1,22 @@
 # PTScope Wiki
 
-## Visao geral
+## Visão geral
 
-PTScope e uma plataforma publica de inteligencia territorial para Portugal.
-Esta base documenta a Fase 0 do backend: uma API FastAPI minima, sem base de
-dados, autenticacao, frontend ou integracoes externas.
+PTScope é uma plataforma pública de inteligência territorial para Portugal.
+Esta base documenta a Fase 0 do backend: uma API FastAPI mínima, sem base de
+dados, autenticação, frontend ou integrações externas.
 
 ## Backend
 
 O backend vive em `backend/` e separa responsabilidades de forma simples:
 
 - `routes`: endpoints HTTP.
-- `services`: integracoes externas futuras.
+- `services`: integrações externas futuras.
 - `schemas`: modelos de dados Pydantic.
 
 ## API
 
-Quando o backend estiver a correr, a documentacao Swagger fica disponivel em:
+Quando o backend estiver a correr, a documentação Swagger fica disponível em:
 
 - `http://127.0.0.1:8000/docs`
 
@@ -26,7 +26,7 @@ Endpoints iniciais:
 - `GET /api/v1/health`
 - `GET /api/v1/municipios/{nome}`
 
-## Proximos passos
+## Próximos passos
 
-A integracao com GEO API PT deve ser implementada numa fase posterior em
+A integração com GEO API PT deve ser implementada numa fase posterior em
 `backend/app/services/geoapi.py`.

@@ -71,6 +71,26 @@ uvicorn app.main:app --reload
 
 A API fica disponível em `http://127.0.0.1:8000`.
 
+### Executar com Docker
+
+Na raiz do projeto:
+
+```bash
+docker compose up --build
+```
+
+O volume do backend fica montado no contentor para permitir hot reload durante
+o desenvolvimento.
+
+### Executar os testes
+
+Com o ambiente virtual ativo:
+
+```bash
+cd backend
+pytest
+```
+
 ## Endpoints
 
 | Método | Caminho | Descrição |
