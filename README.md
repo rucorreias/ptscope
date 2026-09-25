@@ -24,12 +24,11 @@ Neste momento, o repositório contém um backend mínimo em FastAPI com:
 
 - informação básica sobre a aplicação;
 - um endpoint de health check;
-- um endpoint provisório para municípios;
+- um endpoint para consultar dados municipais através da GEO API PT;
 - documentação interativa OpenAPI/Swagger gerada pelo FastAPI;
 - uma base de documentação em `docs/`.
 
-A integração com a GEO API PT e outras fontes de dados ainda não está
-implementada.
+Outras fontes de dados ainda não estão integradas.
 
 ## Tecnologias
 
@@ -97,7 +96,7 @@ pytest
 | --- | --- | --- |
 | `GET` | `/` | Estado básico do projeto |
 | `GET` | `/api/v1/health` | Estado da API |
-| `GET` | `/api/v1/municipios/{nome}` | Resposta provisória para um município |
+| `GET` | `/api/v1/municipios/{nome}` | Dados normalizados de um município |
 | `GET` | `/docs` | Documentação Swagger interativa |
 | `GET` | `/redoc` | Documentação ReDoc |
 

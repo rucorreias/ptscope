@@ -3,15 +3,15 @@
 ## Visão geral
 
 PTScope é uma plataforma pública de inteligência territorial para Portugal.
-Esta base documenta a Fase 0 do backend: uma API FastAPI mínima, sem base de
-dados, autenticação, frontend ou integrações externas.
+Esta base documenta o backend inicial: uma API FastAPI mínima, sem base de
+dados, autenticação ou frontend.
 
 ## Backend
 
 O backend vive em `backend/` e separa responsabilidades de forma simples:
 
 - `routes`: endpoints HTTP.
-- `services`: integrações externas futuras.
+- `services`: integrações externas, incluindo a GEO API PT.
 - `schemas`: modelos de dados Pydantic.
 
 ## API
@@ -26,7 +26,7 @@ Endpoints iniciais:
 - `GET /api/v1/health`
 - `GET /api/v1/municipios/{nome}`
 
-## Próximos passos
+## Integrações
 
-A integração com GEO API PT deve ser implementada numa fase posterior em
-`backend/app/services/geoapi.py`.
+A integração com a GEO API PT está implementada em
+`backend/app/services/geoapi.py` e fornece dados municipais normalizados.
