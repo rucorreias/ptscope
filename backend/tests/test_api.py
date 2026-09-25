@@ -28,7 +28,7 @@ def make_geoapi_response(status_code: int, json: dict[str, object]) -> httpx.Res
 
 
 def test_municipio_is_normalized(monkeypatch: pytest.MonkeyPatch) -> None:
-    async def mock_get(*args, **kwargs) -> httpx.Response:
+    async def mock_get(*_args, **_kwargs) -> httpx.Response:
         return make_geoapi_response(
             200,
             {
@@ -55,7 +55,7 @@ def test_municipio_is_normalized(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_municipio_not_found(monkeypatch: pytest.MonkeyPatch) -> None:
-    async def mock_get(*args, **kwargs) -> httpx.Response:
+    async def mock_get(*_args, **_kwargs) -> httpx.Response:
         return make_geoapi_response(
             404,
             {"erro": "Município não encontrado!"},
@@ -70,7 +70,7 @@ def test_municipio_not_found(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_geoapi_unavailable(monkeypatch: pytest.MonkeyPatch) -> None:
-    async def mock_get(*args, **kwargs) -> httpx.Response:
+    async def mock_get(*_args, **_kwargs) -> httpx.Response:
         request = httpx.Request("GET", "https://json.geoapi.pt/municipio/porto")
         raise httpx.ConnectError("GEO API PT unavailable", request=request)
 
@@ -85,7 +85,7 @@ def test_geoapi_unavailable(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_municipio_area_is_converted_from_hectares() -> None:
-    municipio = geoapi._normalize_municipio(
+    municipio = geoapi._normalize_municipio(  # pylint: disable=protected-access
         {
             "nome": "Porto",
             "geojson": {"properties": {"Area_T_ha": 4145.6}},

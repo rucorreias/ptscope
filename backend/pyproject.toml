@@ -1,5 +1,12 @@
-[tool.ruff]
-target-version = "py312"
+[tool.pylint.main]
+py-version = "3.12"
 
-[tool.ruff.lint.isort]
-known-first-party = ["app"]
+[tool.pylint."messages control"]
+disable = [
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "missing-module-docstring",
+]
+
+[tool.pylint.format]
+max-line-length = 88
