@@ -93,3 +93,25 @@ def test_municipio_area_is_converted_from_hectares() -> None:
     )
 
     assert municipio.area_km2 == 41.456
+
+
+def test_municipio_area_does_not_use_ambiguous_areaha() -> None:
+    municipio = geoapi._normalize_municipio(  # pylint: disable=protected-access
+        {
+            "nome": "Porto",
+            "areaha": "41.29",
+        }
+    )
+
+    assert municipio.area_km2 is None
+
+
+def test_municipio_area_is_none_when_total_hectares_are_invalid() -> None:
+    municipio = geoapi._normalize_municipio(  # pylint: disable=protected-access
+        {
+            "nome": "Porto",
+            "geojson": {"properties": {"Area_T_ha": "invalid"}},
+        }
+    )
+
+    assert municipio.area_km2 is None

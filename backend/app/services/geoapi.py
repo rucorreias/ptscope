@@ -17,16 +17,19 @@ class GeoApiUnavailableError(Exception):
 
 
 def _area_km2(data: dict[str, Any]) -> float | None:
-    """Normalize the best available municipality area to square kilometres."""
+    """Convert the documented total area in hectares to square kilometres."""
     geojson = data.get("geojson")
     if isinstance(geojson, dict):
         properties = geojson.get("properties")
-        if isinstance(properties, dict) and properties.get("Area_T_ha") is not None:
-            return float(properties["Area_T_ha"]) / 100
+        if isinstance(properties, dict):
+            area_ha = properties.get("Area_T_ha")
+            if area_ha is not None and not isinstance(area_ha, bool):
+                try:
+                    return float(area_ha) / 100
+                except (TypeError, ValueError):
+                    return None
 
-    # The legacy municipality field is named `areaha`, but its values are km2.
-    legacy_area = data.get("areaha")
-    return float(legacy_area) if legacy_area is not None else None
+    return None
 
 
 def _normalize_municipio(data: dict[str, Any]) -> MunicipioResponse:
