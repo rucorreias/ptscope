@@ -4,7 +4,6 @@ import httpx
 
 from app.schemas.municipio import MunicipioResponse
 
-
 GEO_API_BASE_URL = "https://json.geoapi.pt"
 GEO_API_TIMEOUT_SECONDS = 10.0
 
@@ -64,7 +63,7 @@ async def get_municipio(nome: str) -> MunicipioResponse:
         response.raise_for_status()
         payload = response.json()
         if not isinstance(payload, dict):
-            raise ValueError("Unexpected GEO API PT response")
+            raise TypeError("Unexpected GEO API PT response")
         return _normalize_municipio(payload)
     except (httpx.HTTPStatusError, TypeError, ValueError) as exc:
         raise GeoApiUnavailableError from exc

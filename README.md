@@ -90,6 +90,14 @@ cd backend
 pytest
 ```
 
+### Executar o lint
+
+Na raiz do projeto, com o ambiente virtual ativo:
+
+```bash
+python -m ruff check --config backend/pyproject.toml backend/app backend/tests
+```
+
 ## Endpoints
 
 | Método | Caminho | Descrição |

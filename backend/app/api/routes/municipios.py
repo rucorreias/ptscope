@@ -3,7 +3,6 @@ from fastapi import APIRouter, HTTPException, status
 from app.schemas.municipio import MunicipioResponse
 from app.services import geoapi
 
-
 router = APIRouter(prefix="/municipios", tags=["municipios"])
 
 

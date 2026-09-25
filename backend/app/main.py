@@ -2,7 +2,6 @@ from fastapi import FastAPI
 
 from app.api.router import api_router
 
-
 app = FastAPI(
     title="PTScope API",
     description="Public territorial intelligence API for Portugal",
