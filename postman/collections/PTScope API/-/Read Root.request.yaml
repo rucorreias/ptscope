@@ -1,0 +1,23 @@
+$kind: http-request
+name: Read Root
+description: Return a minimal status payload for the public API root.
+url: "{{baseUrl}}/"
+method: GET
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", () => {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Correct project identity", () => {
+          const json = pm.response.json();
+
+          pm.expect(json.project).to.eql("PTScope");
+          pm.expect(json.status).to.eql("running");
+      });
+    language: text/javascript
+examples: ./.resources/Read Root.resources/examples
+order: 1000

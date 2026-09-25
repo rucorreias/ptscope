@@ -119,7 +119,8 @@ ptscope/
 │   │   └── main.py     # Aplicação FastAPI
 │   ├── tests/
 │   └── requirements.txt
-└── docs/               # Documentação do projeto
+├── docs/               # Documentação do projeto
+└── postman/            # Collection e environments para desenvolvimento
 ```
 
 ## Contribuir
@@ -163,6 +164,9 @@ abertura formal da comunidade.
 A documentação inicial está em [`docs/README.md`](docs/README.md). Com o backend
 em execução, o contrato atual da API pode ser explorado em
 [`http://127.0.0.1:8000/docs`](http://127.0.0.1:8000/docs).
+
+A collection e as instruções para testar a API no Postman estão em
+[`postman/README.md`](postman/README.md).
 
 ## Segurança
 

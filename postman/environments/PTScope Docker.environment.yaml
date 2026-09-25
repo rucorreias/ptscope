@@ -1,0 +1,7 @@
+name: PTScope Docker
+values:
+  - key: baseUrl
+    value: http://localhost:8000
+  - key: municipio_porto
+    value: porto
+color: 240

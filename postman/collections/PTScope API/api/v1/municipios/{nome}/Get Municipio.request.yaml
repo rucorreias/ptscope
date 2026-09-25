@@ -1,0 +1,47 @@
+$kind: http-request
+name: Get Municipio
+description: Return normalized municipality data from GEO API PT.
+url: "{{baseUrl}}/api/v1/municipios/:nome"
+method: GET
+headers:
+  Accept: application/json
+pathVariables:
+  nome: "{{municipio_porto}}"
+scripts:
+  - type: afterResponse
+    code: |+
+      pm.test("Status code is 200", () => {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response is JSON", () => {
+          pm.response.to.be.json;
+      });
+
+      pm.test("Municipio has required fields", () => {
+          const json = pm.response.json();
+
+          pm.expect(json).to.have.property("nome");
+          pm.expect(json).to.have.property("codigo_ine");
+          pm.expect(json).to.have.property("distrito");
+          pm.expect(json).to.have.property("area_km2");
+      });
+
+      pm.test("Municipio field types are correct", () => {
+          const json = pm.response.json();
+
+          pm.expect(json.nome).to.be.a("string");
+          pm.expect(json.codigo_ine).to.be.a("string");
+          pm.expect(json.distrito).to.be.a("string");
+          pm.expect(json.area_km2).to.be.a("number");
+      });
+
+      pm.test("Código INE do município deve ter exatamente 4 dígitos", () => {
+          const json = pm.response.json();
+
+          pm.expect(json.codigo_ine).to.match(/^\d{4}$/);
+      });
+
+    language: text/javascript
+examples: ./.resources/Get Municipio.resources/examples
+order: 1000

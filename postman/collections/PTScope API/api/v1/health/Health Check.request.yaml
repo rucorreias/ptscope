@@ -1,0 +1,26 @@
+$kind: http-request
+name: Health Check
+description: Confirm that the API process is alive and accepting requests.
+url: "{{baseUrl}}/api/v1/health"
+method: GET
+headers:
+  Accept: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", () => {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response is JSON", () => {
+          pm.response.to.be.json;
+      });
+
+      pm.test("Status is ok", () => {
+          const json = pm.response.json();
+
+          pm.expect(json).to.have.property("status", "ok");
+      });
+    language: text/javascript
+examples: ./.resources/Health Check.resources/examples
+order: 1000

@@ -1,0 +1,17 @@
+name: PTScope Local
+values:
+  - key: baseUrl
+    value: http://127.0.0.1:8000
+  - key: municipio_porto
+    value: porto
+  - key: municipio_lisboa
+    value: lisboa
+  - key: municipio_braga
+    value: braga
+  - key: municipio_coimbra
+    value: coimbra
+  - key: municipio_aveiro
+    value: aveiro
+  - key: municipio_faro
+    value: faro
+color: 120

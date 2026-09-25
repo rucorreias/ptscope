@@ -1,0 +1,5 @@
+$kind: collection
+name: PTScope API
+description: Public territorial intelligence API for Portugal
+variables:
+  baseUrl: http://127.0.0.1:8000

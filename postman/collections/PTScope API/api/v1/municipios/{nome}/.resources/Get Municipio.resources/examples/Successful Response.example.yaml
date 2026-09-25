@@ -1,0 +1,23 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/municipios/:nome"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    nome: porto
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "nome": "Porto",
+        "codigo_ine": "1312",
+        "distrito": "Porto",
+        "area_km2": 41.456
+      }
+order: 1000
