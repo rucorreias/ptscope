@@ -1,5 +1,8 @@
 # GEO API PT: descoberta de dados
 
+As decisões de arquitetura e ingestão derivadas desta investigação são mantidas em:
+docs/architecture/data-ingestion.md
+
 > Data da análise: 25 de setembro de 2026.
 > Âmbito: descoberta e avaliação da fonte. Este documento não define ainda o
 > modelo de dados do PTScope nem uma estratégia de persistência.
