@@ -8,16 +8,23 @@ Geográfica (SNIG) e da Carta Administrativa Oficial de Portugal (CAOP). O
 objetivo é apoiar a descoberta de dados do PTScope; não define um modelo de
 persistência, uma política de autoridade entre fontes nem uma integração.
 
-As conclusões usam as seguintes etiquetas:
+As afirmações usam as seguintes etiquetas:
 
-- **Documentado**: afirmação presente em documentação, metadados ou legislação
-  oficial.
-- **Observado**: comportamento verificado diretamente numa resposta, ficheiro
-  ou recurso oficial em 2026-09-28.
+- **Facto da fonte — documentado** (`Documentado`): afirmação presente em
+  documentação, metadados ou legislação oficial.
+- **Facto da fonte — observado** (`Observado`): comportamento verificado
+  diretamente numa resposta, ficheiro ou recurso oficial em 2026-09-28.
 - **Inferência**: interpretação plausível, mas não confirmada como contrato da
   fonte.
-- **Decisão do PTScope**: regra de tratamento adotada ou proposta pelo projeto;
-  não descreve uma propriedade da DGT, do SNIG ou da CAOP.
+- **Decisão estabelecida do PTScope**: regra já registada em
+  [`docs/architecture/data-ingestion.md`](../../architecture/data-ingestion.md),
+  acompanhada pela referência à secção aplicável.
+- **Recomendação ainda não decidida**: possível regra futura motivada pela
+  investigação, mas ainda não aprovada como decisão de arquitetura.
+- **Questão de arquitetura em aberto**: tema deliberadamente não decidido, sem
+  aprovação implícita de uma das alternativas.
+- **Limite da evidência** ou **Questão aberta da fonte**: conclusão que as
+  fontes consultadas não permitem confirmar.
 
 **Observado:** A investigação usou apenas pedidos `GET` públicos, sequenciais e
 com timeout. Não foi descarregada cartografia nacional. Foram consultados
@@ -27,9 +34,12 @@ um único elemento GeoJSON do município do Porto, com cerca de 416 kB. Para os
 ficheiros GeoPackage nacionais foi usado um pedido parcial de um byte para
 confirmar disponibilidade e dimensão.
 
-**Decisão do PTScope:** sempre que a semântica não esteja confirmada, o valor
-deve ser preservado em bruto, não deve ser normalizado e a dúvida deve ficar
-documentada.
+**Decisão estabelecida do PTScope:** Sempre que a semântica não esteja
+confirmada, o valor deve ser preservado em bruto, não deve ser normalizado e a
+dúvida deve ficar documentada. Ver [§ 2 — Preservação de Dados
+Brutos](../../architecture/data-ingestion.md#2-preservação-de-dados-brutos) e
+[§ 15 — Do Not
+Infer](../../architecture/data-ingestion.md#15-do-not-infer).
 
 ## 2. Visão geral
 
@@ -51,8 +61,11 @@ Fontes:
 
 **Documentado:** O SNIG é a infraestrutura nacional de dados espaciais. O seu
 geoportal permite pesquisar, visualizar e aceder a conjuntos e serviços de
-dados geográficos registados por produtores públicos e privados. O SNIG não é,
-por esse facto, o produtor de todos os recursos que cataloga.
+dados geográficos registados por produtores públicos e privados.
+
+**Limite da evidência:** A presença de um recurso no SNIG não identifica, por
+si só, o SNIG como produtor; esse papel tem de ser verificado nos metadados do
+recurso.
 
 **Documentado:** O Registo Nacional de Dados Geográficos (RNDG) é o catálogo de
 metadados integrado no SNIG. O registo é obrigatório para entidades públicas
@@ -77,7 +90,8 @@ base cartográfica dos Censos 2001, diplomas legais, secções cadastrais, dados
 Procedimentos de Delimitação Administrativa acordados com as autarquias e
 informação de organismos oficiais.
 
-**Factos documentados:** As fontes consultadas distinguem os seguintes papéis:
+**Factos documentados e observados:** As fontes consultadas distinguem os
+seguintes papéis:
 
 | Papel | Entidade ou sistema |
 | --- | --- |
@@ -88,9 +102,11 @@ informação de organismos oficiais.
 | Serviços e ficheiros de distribuição | DGT |
 | Fontes locais de delimitação | Diplomas, autarquias e outros organismos oficiais, conforme a linhagem de cada edição |
 
-**Decisão do PTScope:** Para efeitos de proveniência, o projeto tratará estes
-papéis separadamente e não registará o SNIG como produtor da CAOP apenas por a
-catalogar ou disponibilizar.
+**Decisão estabelecida do PTScope:** Para efeitos de proveniência, o projeto
+tratará estes papéis separadamente e não registará o SNIG como produtor da CAOP
+apenas por a catalogar ou disponibilizar. Ver [§ 1 — Proveniência como
+Requisito
+Obrigatório](../../architecture/data-ingestion.md#1-proveniência-como-requisito-obrigatório).
 
 ## 3. Fontes oficiais consultadas
 
@@ -180,11 +196,16 @@ tinham as seguintes dimensões, obtidas sem descarregar o conteúdo integral:
 **Observado:** O ficheiro continental respondeu com `Last-Modified` de
 2026-02-02.
 
-**Decisão do PTScope:** O projeto tratará `Last-Modified`, data de referência,
-aprovação, publicação e atualização dos metadados como conceitos distintos.
-Uma referência à CAOP conservará pelo menos a
-edição completa (`2024.1`, por exemplo), a cobertura territorial e a data de
-referência quando publicada. “CAOP 2024” e “CAOP 2024.1” são recursos distintos.
+**Decisão estabelecida do PTScope:** O projeto tratará `Last-Modified`, data de
+referência, aprovação, publicação e atualização dos metadados como conceitos
+distintos. Uma referência à CAOP conservará pelo menos a edição completa
+(`2024.1`, por exemplo), a cobertura territorial e a data de referência quando
+publicada. Ver [§ 1 — Proveniência como Requisito
+Obrigatório](../../architecture/data-ingestion.md#1-proveniência-como-requisito-obrigatório),
+[§ 7 — Representação
+Temporal](../../architecture/data-ingestion.md#7-representação-temporal) e [§ 8 — Geografia e
+Versionamento](../../architecture/data-ingestion.md#8-geografia-e-versionamento).
+“CAOP 2024” e “CAOP 2024.1” são recursos distintos.
 
 ## 5. Modelo territorial e identificadores
 
@@ -213,9 +234,11 @@ município, oito para entidade administrativa e três, quatro e cinco para NUTS
 **Observado:** Na distribuição CAOP 2025, Porto surge como município `1312` e
 Bonfim como freguesia `131202`. Os valores são strings nos schemas da OGC API.
 
-**Decisão do PTScope:** Os identificadores serão preservados como
+**Decisão estabelecida do PTScope:** Os identificadores serão preservados como
 strings. Não devem ser convertidos para inteiro, preenchidos, truncados ou
-decompostos sem uma regra oficial aplicável à versão e ao contexto.
+decompostos sem uma regra oficial aplicável à versão e ao contexto. Ver [§ 4 —
+Tratamento de Códigos
+Externos](../../architecture/data-ingestion.md#4-tratamento-de-códigos-externos).
 
 ### 5.2 Responsabilidade e estabilidade dos códigos
 
@@ -244,9 +267,12 @@ correspondência oficiais.
 distrito/ilha e regiões NUTS. Para freguesias, publica ainda
 `designacao_simplificada`.
 
-**Decisão do PTScope:** Igualdade de nome não será usada como igualdade de
-entidade. Nomes e códigos serão conservados separadamente e associados à edição
-observada.
+**Decisão estabelecida do PTScope:** Igualdade de nome não será usada como
+igualdade de entidade. Nomes e códigos serão conservados separadamente e
+associados à edição observada. Ver [§ 8 — Geografia e
+Versionamento](../../architecture/data-ingestion.md#8-geografia-e-versionamento)
+e [§ 15 — Do Not
+Infer](../../architecture/data-ingestion.md#15-do-not-infer).
 
 ## 6. Geometrias, áreas, CRS e precisão
 
@@ -264,8 +290,9 @@ e alinhado com o modelo INSPIRE de Unidades Administrativas. As edições até
 **Observado:** O elemento do município do Porto devolvido pela OGC API usa uma
 geometria GeoJSON `MultiPolygon`, mesmo sendo um exemplo territorial simples.
 
-**Decisão do PTScope:** Uma futura integração aceitará o tipo geométrico
-publicado e não assumirá que municípios são sempre `Polygon`.
+**Recomendação ainda não decidida:** Uma futura integração poderá aceitar o tipo
+geométrico publicado sem assumir que municípios são sempre `Polygon`. Esta
+regra específica ainda não consta de `data-ingestion.md`.
 
 ### 6.2 Sistemas de referência
 
@@ -290,8 +317,9 @@ EPSG:3857, EPSG:4258 e EPSG:3763, com EPSG:3763 como CRS de armazenamento. O
 pedido do Porto sem parâmetro `crs` devolveu `Content-Crs` correspondente a
 CRS84.
 
-**Decisão do PTScope:** O CRS efetivo será lido do recurso ou da resposta, não
-deduzido apenas a partir da região.
+**Recomendação ainda não decidida:** Numa futura integração, ler o CRS efetivo
+do recurso ou da resposta, em vez de o deduzir apenas a partir da região. Esta
+regra específica ainda não consta de `data-ingestion.md`.
 
 ### 6.3 Área e perímetro
 
@@ -308,9 +336,13 @@ para área, quilómetros para perímetro e metros para altitudes.
 conversão do valor apresentado em hectares seria `41.4202` km²; portanto, o
 campo em km² está publicado com menor precisão decimal.
 
-**Decisão do PTScope:** Os campos oficiais e a precisão publicada serão
-preservados. Um valor recalculado não substituirá o original, pois pode refletir
-uma precisão ou regra de arredondamento diferente.
+**Decisão estabelecida do PTScope:** Os campos oficiais e a precisão publicada
+serão preservados. Um valor recalculado não substituirá o original, pois pode
+refletir uma precisão ou regra de arredondamento diferente. Ver [§ 2 —
+Preservação de Dados
+Brutos](../../architecture/data-ingestion.md#2-preservação-de-dados-brutos) e
+[§ 3 — Tipos Numéricos e
+Precisão](../../architecture/data-ingestion.md#3-tipos-numéricos-e-precisão).
 
 ### 6.4 Escala e precisão posicional
 
@@ -322,8 +354,10 @@ delimitação.
 **Questão aberta:** Não foi encontrada nos recursos consultados uma medida
 quantitativa única de exatidão posicional aplicável a todos os limites.
 
-**Decisão do PTScope:** A escala de referência não será transformada numa
-tolerância geométrica sem documentação que sustente essa conversão.
+**Decisão estabelecida do PTScope:** A escala de referência não será
+transformada numa tolerância geométrica sem documentação que sustente essa
+conversão. Esta aplicação decorre da regra geral em [§ 15 — Do Not
+Infer](../../architecture/data-ingestion.md#15-do-not-infer).
 
 ## 7. Formas oficiais de acesso
 
@@ -343,8 +377,9 @@ freguesias, municípios e distritos/ilhas e notas metodológicas. Os CSV princip
 foram lidos como UTF-8, mas o ficheiro de notas dentro do conjunto CSV estava em
 ISO-8859-1.
 
-**Decisão do PTScope:** A codificação será detetada ou configurada por ficheiro,
-sem presumir uniformidade dentro do pacote.
+**Recomendação ainda não decidida:** Detetar ou configurar a codificação por
+ficheiro, sem presumir uniformidade dentro do pacote. Esta estratégia concreta
+ainda não consta de `data-ingestion.md`.
 
 ### 7.2 Catálogo SNIG/RNDG
 
@@ -429,8 +464,9 @@ pedidos de escrita.
 **Limite da evidência:** Essa declaração, por si só, não demonstra que escrita
 pública e anónima esteja autorizada.
 
-**Decisão do PTScope:** O âmbito considerado neste estudo e numa eventual
-integração é apenas de leitura por `GET`.
+**Âmbito desta investigação:** Foram avaliados apenas mecanismos de leitura por
+`GET`. Não foi tomada uma decisão de arquitetura sobre suporte futuro a
+operações de escrita.
 
 #### Schemas observados
 
@@ -492,9 +528,12 @@ de acesso, sujeito às condições de licença.
 concorrência ou volume. A ausência de limites publicados não demonstra que não
 existam controlos operacionais.
 
-**Decisão do PTScope:** Esta descoberta não autoriza crawling ou downloads
-indiscriminados; uma futura integração deverá usar pedidos limitados e
-proporcionais.
+**Decisão estabelecida do PTScope:** Uma futura integração deverá usar
+concorrência conservadora, timeout explícito e pedidos pequenos e filtrados. Ver
+[§ 12 — APIs Frágeis e Rate
+Limiting](../../architecture/data-ingestion.md#12-apis-frágeis-e-rate-limiting).
+A investigação não interpreta a ausência de limites publicados como autorização
+para crawling ou downloads indiscriminados.
 
 ## 8. Metadados, proveniência e licença por recurso
 
@@ -568,29 +607,37 @@ de reutilização das tabelas fica registada como questão aberta.
 registo do recurso. A presença de um recurso no catálogo não identifica, por si
 só, o SNIG como produtor.
 
-**Decisão do PTScope:** A licença e a atribuição serão verificadas e guardadas
-por recurso e edição. Uma política genérica do portal ou a licença de um dataset
-relacionado não substituirá uma declaração específica do recurso consumido.
+**Recomendação ainda não decidida:** Registar licença e atribuição por recurso e
+edição, sem substituir uma declaração específica por uma política genérica do
+portal ou pela licença de um dataset relacionado. `data-ingestion.md` exige
+proveniência por dataset e recurso, mas ainda não estabelece expressamente um
+modelo para licença e atribuição.
 
 ### 8.6 Informação de proveniência a conservar
 
-**Decisão do PTScope:** Sem definir já um schema, uma futura ingestão deverá ser
-capaz de conservar:
+**Decisão estabelecida do PTScope:** Sem definir já um schema, uma futura
+ingestão deverá conservar os elementos já exigidos por [§ 1 — Proveniência como
+Requisito
+Obrigatório](../../architecture/data-ingestion.md#1-proveniência-como-requisito-obrigatório)
+e [§ 8 — Geografia e
+Versionamento](../../architecture/data-ingestion.md#8-geografia-e-versionamento):
 
 - entidade responsável pela execução e manutenção da CAOP: DGT;
 - papel declarado nos metadados regionais consultados: DGT como
   `pointOfContact`;
 - infraestrutura/catalogador: SNIG/RNDG;
-- sistema/dataset: CAOP;
-- edição completa e cobertura regional;
-- identificador do registo de metadados;
+- sistema/dataset: CAOP, incluindo edição completa e cobertura regional;
 - recurso, endpoint e parâmetros usados;
 - identificador externo da entidade;
-- CRS pedido e CRS devolvido;
-- data de referência, publicação e atualização dos metadados;
-- data e hora de extração;
-- licença e texto de atribuição;
-- diploma ou fonte de alteração, quando aplicável.
+- classificação, versão e referência administrativa da geografia;
+- data de referência, atualização da fonte, extração e ingestão.
+
+**Recomendação ainda não decidida:** Acrescentar aos metadados de proveniência o
+identificador do registo de metadados, o CRS pedido e devolvido, a data de
+publicação, a licença, o texto de atribuição e o diploma ou fonte de alteração
+quando aplicável. Estes elementos são relevantes para a CAOP, mas ainda não
+estão todos explicitamente definidos como campos obrigatórios em
+`data-ingestion.md`.
 
 ## 9. Exemplos reais minimizados
 
@@ -644,7 +691,11 @@ sete freguesias do Porto foi `4142.01`, enquanto o município publica `4142.02`.
 **Inferência:** A diferença de `0.01` ha é compatível com arredondamentos dos
 valores apresentados, mas a causa não foi confirmada.
 
-**Decisão do PTScope:** A diferença não será corrigida automaticamente.
+**Decisão estabelecida do PTScope:** A diferença não será corrigida
+automaticamente. Ver [§ 2 — Preservação de Dados
+Brutos](../../architecture/data-ingestion.md#2-preservação-de-dados-brutos) e
+[§ 15 — Do Not
+Infer](../../architecture/data-ingestion.md#15-do-not-infer).
 
 ### 9.2 Alteração administrativa: Pernes
 
@@ -687,8 +738,11 @@ para tabelas oficiais de correspondência do INE:
 **Documentado:** No caso descrito pela CAOP 2024.1, as alterações administrativas
 afetaram a organização territorial e implicaram a atribuição de novos códigos.
 
-**Decisão do PTScope:** Geometria, designação, hierarquia ou identificador não
-serão usados isoladamente para reconciliar versões.
+**Decisão estabelecida do PTScope:** Geometria, designação, hierarquia ou
+identificador não serão usados isoladamente para reconciliar versões. As
+correspondências têm de ser explícitas e versionadas, conforme [§ 8 — Geografia
+e
+Versionamento](../../architecture/data-ingestion.md#8-geografia-e-versionamento).
 
 ## 10. Relação com GEO API PT e INE
 
@@ -715,9 +769,13 @@ diferentes.
 **Documentado:** As notas da tabela CAOP 2025 dizem que a associação territorial
 às NUTS segue o Regulamento Delegado (UE) 2023/674 e a Lei n.º 24-A/2022.
 
-**Decisão do PTScope:** Uma correspondência CAOP–NUTS conservará a versão da
-CAOP e a versão/classificação NUTS. O projeto não estabelecerá correspondências
-apenas pela semelhança da designação ou do código.
+**Decisão estabelecida do PTScope:** Uma correspondência CAOP–NUTS conservará a
+versão da CAOP e a versão/classificação NUTS. O projeto não estabelecerá
+correspondências apenas pela semelhança da designação ou do código. Ver [§ 8 —
+Geografia e
+Versionamento](../../architecture/data-ingestion.md#8-geografia-e-versionamento)
+e [§ 15 — Do Not
+Infer](../../architecture/data-ingestion.md#15-do-not-infer).
 
 ### 10.3 Área do Porto
 
@@ -729,9 +787,18 @@ tabela arredondada. A GEO API PT anteriormente observada, declarando CAOP
 a edições e canais distintos. Este estudo não determina se resulta de alteração
 geométrica, processamento, edição da fonte ou outro fator.
 
-**Decisão do PTScope:** Preservar valor, unidade, precisão, versão, recurso e
-proveniência. Não escolher ainda CAOP, GEO API PT ou INE como autoridade para
-área, população ou limites.
+**Decisão estabelecida do PTScope:** Preservar valor, unidade, precisão, versão,
+recurso e proveniência. Ver [§ 1 — Proveniência como Requisito
+Obrigatório](../../architecture/data-ingestion.md#1-proveniência-como-requisito-obrigatório),
+[§ 2 — Preservação de Dados
+Brutos](../../architecture/data-ingestion.md#2-preservação-de-dados-brutos),
+[§ 3 — Tipos Numéricos e
+Precisão](../../architecture/data-ingestion.md#3-tipos-numéricos-e-precisão) e
+[§ 8 — Geografia e
+Versionamento](../../architecture/data-ingestion.md#8-geografia-e-versionamento).
+
+**Questão de arquitetura em aberto:** Este estudo não escolhe CAOP, GEO API PT
+ou INE como autoridade para área, população ou limites.
 
 ## 11. Nulos, campos ausentes e casos limite
 
@@ -747,9 +814,10 @@ freguesia, nos termos do artigo 78.º da Lei n.º 9/87.
 **Documentado:** O caso do Corvo é uma exceção explícita entre a contagem para
 fins estatísticos e a existência jurídica de freguesia.
 
-**Decisão do PTScope:** O projeto não imporá a regra “todo o município tem pelo
-menos uma freguesia juridicamente constituída” sem representar o contexto da
-fonte.
+**Decisão estabelecida do PTScope:** O projeto não produzirá uma normalização
+que ignore esta exceção sem semântica confirmada. Esta aplicação decorre da
+regra geral em [§ 15 — Do Not
+Infer](../../architecture/data-ingestion.md#15-do-not-infer).
 
 **Observado:** Os schemas da OGC API listam propriedades e tipos, mas as
 respostas consultadas não forneceram uma garantia de não nulabilidade para cada
@@ -805,8 +873,10 @@ incorporar.
 **Inferência:** As datas podem referir etapas diferentes ou resultar de erro de
 metadados; a causa não foi confirmada.
 
-**Decisão do PTScope:** Estes valores não serão usados isoladamente como data de
-produção da edição.
+**Decisão estabelecida do PTScope:** Estes valores não serão usados isoladamente
+como data de produção da edição enquanto a semântica não estiver confirmada.
+Ver [§ 15 — Do Not
+Infer](../../architecture/data-ingestion.md#15-do-not-infer).
 
 **Observado:** Os metadados enumeram Shapefile, GeoPackage, imagens e OGC API
 como formatos. A página atual de download da edição 2025 oferece GeoPackage;
@@ -824,14 +894,19 @@ do modelo e conformidade formal não são equivalentes.
 `2000-10-30T18:24:39Z` e `2007-10-30T08:57:29Z`, incompatível à primeira vista
 com a edição 2025. Não foi encontrada explicação oficial.
 
-**Decisão do PTScope:** Enquanto a semântica não for esclarecida, estes valores
-não serão tratados como validade temporal da CAOP 2025.
+**Decisão estabelecida do PTScope:** Enquanto a semântica não for esclarecida,
+estes valores não serão tratados como validade temporal da CAOP 2025. Ver [§ 7
+— Representação
+Temporal](../../architecture/data-ingestion.md#7-representação-temporal) e [§ 15
+— Do Not Infer](../../architecture/data-ingestion.md#15-do-not-infer).
 
 **Observado:** Uma resposta com um único resultado incluiu uma ligação `next`
 com `offset=1`, embora `numberMatched=1` e `numberReturned=1`.
 
-**Decisão do PTScope:** Uma futura paginação não dependerá apenas da presença da
-ligação para concluir que existem mais resultados.
+**Recomendação ainda não decidida:** Uma futura paginação poderá considerar
+`numberMatched`, `numberReturned`, `offset` e o conteúdo efetivamente devolvido,
+em vez de depender apenas da presença da ligação `next`. Esta lógica ainda não
+consta de `data-ingestion.md`.
 
 **Observado:** Uma ligação canónica de coleção foi anunciada com tipo
 `text/csv`, mas o URL apontava para a página HTML de metadados do SNIG. O tipo da
@@ -875,10 +950,16 @@ administrativas. Não foram observados neles dados de população, atividade
 económica ou contratação pública, nem uma declaração de autoridade sobre
 conceitos produzidos por outras fontes.
 
-**Decisão adiada:** Este estudo não determina qual fonte prevalece em áreas,
-população, códigos compostos ou limites. Uma futura política do PTScope deverá
-operar por conceito, edição, data de referência e finalidade, preservando
-divergências e proveniência.
+**Questão de arquitetura em aberto:** Este estudo não determina qual fonte
+prevalece em áreas, população, códigos compostos ou limites.
+
+**Recomendação ainda não decidida:** Uma futura política de autoridade poderá
+operar por conceito, edição, data de referência e finalidade. A preservação das
+divergências e da proveniência já é exigida por [§ 1 — Proveniência como
+Requisito
+Obrigatório](../../architecture/data-ingestion.md#1-proveniência-como-requisito-obrigatório)
+e [§ 2 — Preservação de Dados
+Brutos](../../architecture/data-ingestion.md#2-preservação-de-dados-brutos).
 
 ## 15. Questões abertas
 
@@ -927,8 +1008,23 @@ administrativas, incluindo novos códigos, e os campos e a precisão observados
 não são idênticos entre CSV e OGC API. Não foi demonstrado um contrato único
 para todos os formatos.
 
-**Decisão do PTScope para uma integração futura:** preservar identificadores
-como strings; guardar edição, cobertura, CRS, unidade, precisão, recurso e
-proveniência; não reconciliar automaticamente valores divergentes; e tratar
-metadados inconsistentes como questões de qualidade, não como factos a
-normalizar.
+**Decisões estabelecidas do PTScope:** Preservar identificadores como strings,
+guardar edição, unidade, precisão, recurso e proveniência, não reconciliar
+automaticamente valores divergentes e não normalizar semântica desconhecida.
+Estas regras constam de [§ 1 — Proveniência como Requisito
+Obrigatório](../../architecture/data-ingestion.md#1-proveniência-como-requisito-obrigatório),
+[§ 2 — Preservação de Dados
+Brutos](../../architecture/data-ingestion.md#2-preservação-de-dados-brutos),
+[§ 4 — Tratamento de Códigos
+Externos](../../architecture/data-ingestion.md#4-tratamento-de-códigos-externos),
+[§ 8 — Geografia e
+Versionamento](../../architecture/data-ingestion.md#8-geografia-e-versionamento)
+e [§ 15 — Do Not
+Infer](../../architecture/data-ingestion.md#15-do-not-infer).
+
+**Recomendações ainda não decididas:** Definir o tratamento dos tipos
+geométricos, tornar obrigatórios o CRS e a licença na proveniência, detetar a
+codificação por ficheiro, implementar uma lógica específica de paginação OGC
+API e definir uma política de autoridade por conceito. Estas opções requerem
+decisão posterior em `data-ingestion.md` antes de serem tratadas como
+arquitetura do PTScope.
