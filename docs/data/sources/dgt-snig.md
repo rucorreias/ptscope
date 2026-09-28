@@ -16,6 +16,8 @@ As conclusões usam as seguintes etiquetas:
   ou recurso oficial em 2026-09-28.
 - **Inferência**: interpretação plausível, mas não confirmada como contrato da
   fonte.
+- **Decisão do PTScope**: regra de tratamento adotada ou proposta pelo projeto;
+  não descreve uma propriedade da DGT, do SNIG ou da CAOP.
 
 **Observado:** A investigação usou apenas pedidos `GET` públicos, sequenciais e
 com timeout. Não foi descarregada cartografia nacional. Foram consultados
@@ -25,7 +27,7 @@ um único elemento GeoJSON do município do Porto, com cerca de 416 kB. Para os
 ficheiros GeoPackage nacionais foi usado um pedido parcial de um byte para
 confirmar disponibilidade e dimensão.
 
-**Regra de tratamento:** sempre que a semântica não esteja confirmada, o valor
+**Decisão do PTScope:** sempre que a semântica não esteja confirmada, o valor
 deve ser preservado em bruto, não deve ser normalizado e a dúvida deve ficar
 documentada.
 
@@ -75,20 +77,20 @@ base cartográfica dos Censos 2001, diplomas legais, secções cadastrais, dados
 Procedimentos de Delimitação Administrativa acordados com as autarquias e
 informação de organismos oficiais.
 
-**Conclusão documentada:** Os papéis devem ser preservados separadamente:
+**Factos documentados:** As fontes consultadas distinguem os seguintes papéis:
 
 | Papel | Entidade ou sistema |
 | --- | --- |
 | Competência para criar ou alterar limites | Assembleia da República, através de diploma legal |
-| Produtor e mantenedor cartográfico da CAOP | DGT |
+| Execução e manutenção cartográfica da CAOP | DGT |
 | Atribuição dos códigos DTMNFR | Instituto Nacional de Estatística (INE) |
 | Catálogo e infraestrutura de descoberta | RNDG/SNIG, geridos pela DGT |
 | Serviços e ficheiros de distribuição | DGT |
 | Fontes locais de delimitação | Diplomas, autarquias e outros organismos oficiais, conforme a linhagem de cada edição |
 
-**Inferência:** Chamar ao SNIG “fonte produtora” da CAOP apagaria a diferença
-entre catálogo, infraestrutura de acesso e produtor. Para proveniência, o
-PTScope deverá conservar esses papéis em separado.
+**Decisão do PTScope:** Para efeitos de proveniência, o projeto tratará estes
+papéis separadamente e não registará o SNIG como produtor da CAOP apenas por a
+catalogar ou disponibilizar.
 
 ## 3. Fontes oficiais consultadas
 
@@ -133,8 +135,10 @@ GET https://snig.dgterritorio.gov.pt/rndg/srv/por/csw
 
 **Observado:** A rota sem formatador
 `/rndg/srv/api/records/{id}` devolveu HTTP 400 com um erro XML de transformação,
-enquanto `/formatters/xml` e o pedido CSW devolveram HTTP 200. Não se deve
-assumir que todas as rotas internas do frontend são uma API pública estável.
+enquanto `/formatters/xml` e o pedido CSW devolveram HTTP 200.
+
+**Limite da evidência:** Este teste não demonstra que todas as rotas internas do
+frontend constituam uma API pública ou estável.
 
 ### 3.3 Legislação e alterações administrativas
 
@@ -174,10 +178,11 @@ tinham as seguintes dimensões, obtidas sem descarregar o conteúdo integral:
 | Madeira | [CAOP_RAM_2025-gpkg.zip](https://geo2.dgterritorio.gov.pt/caop/CAOP_RAM_2025-gpkg.zip) | 15 235 290 bytes |
 
 **Observado:** O ficheiro continental respondeu com `Last-Modified` de
-2026-02-02. Esta data técnica não deve ser confundida com a data de referência,
-aprovação, publicação ou atualização dos metadados.
+2026-02-02.
 
-**Conclusão documentada:** Uma referência à CAOP deve conservar pelo menos a
+**Decisão do PTScope:** O projeto tratará `Last-Modified`, data de referência,
+aprovação, publicação e atualização dos metadados como conceitos distintos.
+Uma referência à CAOP conservará pelo menos a
 edição completa (`2024.1`, por exemplo), a cobertura territorial e a data de
 referência quando publicada. “CAOP 2024” e “CAOP 2024.1” são recursos distintos.
 
@@ -208,7 +213,7 @@ município, oito para entidade administrativa e três, quatro e cinco para NUTS
 **Observado:** Na distribuição CAOP 2025, Porto surge como município `1312` e
 Bonfim como freguesia `131202`. Os valores são strings nos schemas da OGC API.
 
-**Conclusão documentada:** Os identificadores devem ser preservados como
+**Decisão do PTScope:** Os identificadores serão preservados como
 strings. Não devem ser convertidos para inteiro, preenchidos, truncados ou
 decompostos sem uma regra oficial aplicável à versão e ao contexto.
 
@@ -223,9 +228,10 @@ determinada pelas Leis n.º 2/2025, n.º 3/2025 e n.º 25-A/2025. A DGT declara
 que foram atribuídos novos códigos `DTMNFR` pelo INE, em conformidade com a 75.ª
 deliberação da Secção Permanente de Coordenação Estatística.
 
-**Conclusão documentada:** Um código pode estar associado a uma versão da
-organização administrativa. A sua estabilidade através de fusões, reposições,
-desagregações ou alterações de limites não deve ser presumida.
+**Limite da evidência:** A atribuição de novos códigos na CAOP 2024.1 demonstra
+que pelo menos algumas alterações administrativas afetam identificadores. As
+fontes consultadas não sustentam uma garantia geral de estabilidade dos códigos
+através de fusões, reposições, desagregações ou alterações de limites.
 
 **Inferência:** Para estudos longitudinais, apenas guardar o código corrente
 pode impedir a reconstrução correta da geografia válida numa data passada. A
@@ -238,8 +244,9 @@ correspondência oficiais.
 distrito/ilha e regiões NUTS. Para freguesias, publica ainda
 `designacao_simplificada`.
 
-**Conclusão observada:** Igualdade de nome não é um identificador. Nomes e
-códigos devem ser conservados separadamente e associados à edição observada.
+**Decisão do PTScope:** Igualdade de nome não será usada como igualdade de
+entidade. Nomes e códigos serão conservados separadamente e associados à edição
+observada.
 
 ## 6. Geometrias, áreas, CRS e precisão
 
@@ -256,7 +263,9 @@ e alinhado com o modelo INSPIRE de Unidades Administrativas. As edições até
 
 **Observado:** O elemento do município do Porto devolvido pela OGC API usa uma
 geometria GeoJSON `MultiPolygon`, mesmo sendo um exemplo territorial simples.
-Consumidores não devem assumir `Polygon`.
+
+**Decisão do PTScope:** Uma futura integração aceitará o tipo geométrico
+publicado e não assumirá que municípios são sempre `Polygon`.
 
 ### 6.2 Sistemas de referência
 
@@ -281,8 +290,8 @@ EPSG:3857, EPSG:4258 e EPSG:3763, com EPSG:3763 como CRS de armazenamento. O
 pedido do Porto sem parâmetro `crs` devolveu `Content-Crs` correspondente a
 CRS84.
 
-**Conclusão observada:** O CRS efetivo deve ser lido do recurso ou da resposta;
-não deve ser deduzido apenas a partir da região.
+**Decisão do PTScope:** O CRS efetivo será lido do recurso ou da resposta, não
+deduzido apenas a partir da região.
 
 ### 6.3 Área e perímetro
 
@@ -299,9 +308,9 @@ para área, quilómetros para perímetro e metros para altitudes.
 conversão do valor apresentado em hectares seria `41.4202` km²; portanto, o
 campo em km² está publicado com menor precisão decimal.
 
-**Conclusão observada:** Os campos oficiais e a sua precisão publicada devem ser
-preservados. Recalcular um campo e substituir o original pode criar diferenças
-de arredondamento.
+**Decisão do PTScope:** Os campos oficiais e a precisão publicada serão
+preservados. Um valor recalculado não substituirá o original, pois pode refletir
+uma precisão ou regra de arredondamento diferente.
 
 ### 6.4 Escala e precisão posicional
 
@@ -311,8 +320,10 @@ linhagem enumera fontes em escalas que variam, conforme o caso, entre 1:1 000,
 delimitação.
 
 **Questão aberta:** Não foi encontrada nos recursos consultados uma medida
-quantitativa única de exatidão posicional aplicável a todos os limites. A escala
-de referência não deve ser transformada numa tolerância geométrica inventada.
+quantitativa única de exatidão posicional aplicável a todos os limites.
+
+**Decisão do PTScope:** A escala de referência não será transformada numa
+tolerância geométrica sem documentação que sustente essa conversão.
 
 ## 7. Formas oficiais de acesso
 
@@ -332,8 +343,8 @@ freguesias, municípios e distritos/ilhas e notas metodológicas. Os CSV princip
 foram lidos como UTF-8, mas o ficheiro de notas dentro do conjunto CSV estava em
 ISO-8859-1.
 
-**Conclusão observada:** A codificação não deve ser presumida uniforme entre
-todos os ficheiros de um pacote.
+**Decisão do PTScope:** A codificação será detetada ou configurada por ficheiro,
+sem presumir uniformidade dentro do pacote.
 
 ### 7.2 Catálogo SNIG/RNDG
 
@@ -415,9 +426,11 @@ código `NotFound`.
 relativas a criação, substituição e eliminação. Esta investigação não fez
 pedidos de escrita.
 
-**Conclusão observada:** Essa declaração, por si só, não prova que escrita
-pública e anónima esteja autorizada. Para o PTScope, o contrato estudado é apenas
-de leitura por `GET`.
+**Limite da evidência:** Essa declaração, por si só, não demonstra que escrita
+pública e anónima esteja autorizada.
+
+**Decisão do PTScope:** O âmbito considerado neste estudo e numa eventual
+integração é apenas de leitura por `GET`.
 
 #### Schemas observados
 
@@ -442,8 +455,8 @@ de leitura por `GET`.
 `perimetro_km` e `designacao_simplificada`.
 
 **Limitação observada:** O schema da API classifica `perimetro_km` como inteiro.
-Não se deve inferir que a medição original não tinha casas decimais; este é
-apenas o contrato publicado por esta representação.
+Este é o contrato publicado por esta representação; não demonstra que a medição
+de origem tenha sido produzida sem casas decimais.
 
 ### 7.4 WMS
 
@@ -458,9 +471,10 @@ distritos, municípios, freguesias, troços e NUTS 1, 2 e 3. O `GetCapabilities`
 anuncia formatos de imagem como PNG, JPEG, GIF e TIFF, além de outros formatos
 fornecidos pelo GeoServer.
 
-**Conclusão observada:** “Formato anunciado pelo WMS” não equivale a “formato de
-download vetorial oficial”. Nesta investigação apenas foram testadas as
-capabilities, não cada combinação de camada, estilo, CRS e formato.
+**Limite da evidência:** Um formato anunciado pelo WMS é um formato de resposta
+do serviço, não evidência de que exista um download vetorial oficial nesse
+formato. Nesta investigação apenas foram testadas as capabilities, não cada
+combinação de camada, estilo, CRS e formato.
 
 **Questão aberta:** Não foi encontrada nos metadados atuais da CAOP uma ligação
 específica para WFS. A existência de documentação geral de WFS na DGT não prova
@@ -475,54 +489,97 @@ responderam sem autenticação.
 de acesso, sujeito às condições de licença.
 
 **Questão aberta:** Não foram encontrados limites formais de frequência,
-concorrência ou volume. Isto não deve ser interpretado como autorização para
-crawling ou downloads indiscriminados.
+concorrência ou volume. A ausência de limites publicados não demonstra que não
+existam controlos operacionais.
+
+**Decisão do PTScope:** Esta descoberta não autoriza crawling ou downloads
+indiscriminados; uma futura integração deverá usar pedidos limitados e
+proporcionais.
 
 ## 8. Metadados, proveniência e licença por recurso
 
-### 8.1 GeoPackages CAOP 2025
+### 8.1 Registos regionais CAOP 2025
 
-**Documentado:** Os três registos RNDG identificam a DGT como responsável e
-produtor/manutentor da CAOP, descrevem a linhagem e apontam para os downloads
-GeoPackage específicos de Continente, Açores e Madeira.
-
-**Documentado:** Os metadados declaram periodicidade anual, data de publicação
-2026-02-18 e data de atualização dos metadados 2026-07-02.
-
-**Documentado:** A licença declarada para cada um dos três recursos é Creative
-Commons Attribution 4.0 (`CC BY 4.0`), com a atribuição:
+**Observado nos metadados RNDG:** Cada um dos três registos abaixo contém, ao
+nível das restrições legais do conjunto identificado, `CC-BY-4.0` e exige o
+mesmo texto de crédito quando informação geográfica propriedade da DGT seja
+publicada ou divulgada, mesmo que parcialmente adaptada:
 
 ```text
 Informação geográfica cedida pela Direção-Geral do Território
 ```
 
-**Observado:** O ZIP da tabela de áreas não continha um ficheiro de licença
-autónomo. A licença explícita foi localizada nos metadados do conjunto e na
-política de dados abertos da DGT, não dentro desse pacote.
+| Recurso identificado pelo registo | ID RNDG | Licença e atribuição no registo |
+| --- | --- | --- |
+| CAOP 2025 — Continente | [`198497815bf647ecaa990c34c42e932e`](https://snig.dgterritorio.gov.pt/rndg/srv/api/records/198497815bf647ecaa990c34c42e932e/formatters/xml) | `CC-BY-4.0`; texto de crédito acima |
+| CAOP 2025 — Região Autónoma dos Açores | [`d9ca5eef-9860-4f5b-99a8-10661208d727`](https://snig.dgterritorio.gov.pt/rndg/srv/api/records/d9ca5eef-9860-4f5b-99a8-10661208d727/formatters/xml) | `CC-BY-4.0`; texto de crédito acima |
+| CAOP 2025 — Região Autónoma da Madeira | [`78aef3be-0232-43ad-9dd5-fcdce15da03f`](https://snig.dgterritorio.gov.pt/rndg/srv/api/records/78aef3be-0232-43ad-9dd5-fcdce15da03f/formatters/xml) | `CC-BY-4.0`; texto de crédito acima |
+
+**Observado:** Os mesmos registos identificam a DGT como ponto de contacto,
+descrevem a linhagem, declaram frequência anual e data de publicação
+2026-02-18, e ligam aos GeoPackages das respetivas coberturas. A página oficial
+da CAOP atribui à DGT a execução e manutenção da carta; o papel ISO expresso
+nestes três metadados é `pointOfContact`, não um papel codificado como
+`originator` ou `owner`.
+
+**Observado:** A data de atualização dos metadados consultados era 2026-07-02.
+É uma data do registo, não necessariamente uma data de alteração do conteúdo
+cartográfico.
 
 ### 8.2 OGC API
 
-**Observado:** A descrição OpenAPI declara `CC BY 4.0`. Os elementos devolvidos
-devem conservar a identificação da coleção, endpoint, parâmetros, data de
-extração e licença observada.
+**Observado:** A secção `info.license` da [descrição OpenAPI do
+serviço](https://ogcapi.dgterritorio.gov.pt/openapi?f=json) declara `CC-BY 4.0`
+e liga a `https://creativecommons.org/licenses/by/4.0/`. A OpenAPI consultada
+não contém o texto de crédito específico reproduzido nos três registos CAOP.
 
-### 8.3 SNIG/RNDG
+**Limite da evidência:** Esta declaração confirma a licença apresentada pelo
+serviço OGC API, mas não esclarece sozinha se todas as coleções presentes ou
+futuras têm exatamente as mesmas condições nem acrescenta uma regra de
+atribuição específica por coleção.
 
-**Documentado:** O RNDG cataloga condições de acesso e uso definidas pelo
-produtor. A presença de um recurso no catálogo não transfere a autoria para o
-SNIG.
+### 8.3 WMS regionais
 
-**Conclusão documentada:** A licença deve ser verificada no registo do recurso e
-da edição consumida. A indicação genérica “todos os direitos reservados” no
-rodapé de um site não substitui a licença específica `CC BY 4.0` declarada nos
-metadados do dataset.
+**Observado:** Os três `GetCapabilities` WMS consultados indicam ausência de
+taxas e de restrições de acesso (`Fees`/`AccessConstraints` como `none`, `None`
+ou `No conditions apply`). Não apresentam uma licença Creative Commons nem um
+texto de atribuição no bloco de serviço.
 
-### 8.4 Informação de proveniência a conservar
+**Limite da evidência:** Ausência de taxas ou restrições de acesso não equivale
+a uma licença de reutilização. Para as camadas CAOP, a declaração explícita de
+`CC-BY-4.0` e o crédito foram encontrados nos metadados regionais do conjunto,
+não no `GetCapabilities` WMS.
 
-**Conclusão derivada de elementos documentados:** Uma futura ingestão deve ser
-capaz de conservar, sem definir já o schema:
+### 8.4 Tabelas de áreas e ficheiros auxiliares
 
-- produtor e mantenedor: DGT;
+**Observado:** O ZIP das tabelas de áreas CAOP 2025 não contém um ficheiro de
+licença autónomo. Não foi identificado um registo RNDG dedicado exclusivamente
+a esse ZIP. A página geral de dados abertos da DGT menciona `CC BY 4.0`, mas a
+investigação não confirmou uma declaração de licença incorporada ou específica
+para este ficheiro auxiliar.
+
+**Limite da evidência:** Não se propaga automaticamente para este ZIP a licença
+de outro recurso apenas por estar ligado na mesma página CAOP. A condição exata
+de reutilização das tabelas fica registada como questão aberta.
+
+### 8.5 SNIG/RNDG e regra do PTScope
+
+**Documentado:** O RNDG cataloga as condições de acesso e uso declaradas no
+registo do recurso. A presença de um recurso no catálogo não identifica, por si
+só, o SNIG como produtor.
+
+**Decisão do PTScope:** A licença e a atribuição serão verificadas e guardadas
+por recurso e edição. Uma política genérica do portal ou a licença de um dataset
+relacionado não substituirá uma declaração específica do recurso consumido.
+
+### 8.6 Informação de proveniência a conservar
+
+**Decisão do PTScope:** Sem definir já um schema, uma futura ingestão deverá ser
+capaz de conservar:
+
+- entidade responsável pela execução e manutenção da CAOP: DGT;
+- papel declarado nos metadados regionais consultados: DGT como
+  `pointOfContact`;
 - infraestrutura/catalogador: SNIG/RNDG;
 - sistema/dataset: CAOP;
 - edição completa e cobertura regional;
@@ -585,8 +642,9 @@ Bonfim surgiu com `dtmnfr="131202"`, `area_ha=309.63` e
 sete freguesias do Porto foi `4142.01`, enquanto o município publica `4142.02`.
 
 **Inferência:** A diferença de `0.01` ha é compatível com arredondamentos dos
-valores apresentados, mas a causa não foi confirmada. Não deve ser corrigida
-automaticamente.
+valores apresentados, mas a causa não foi confirmada.
+
+**Decisão do PTScope:** A diferença não será corrigida automaticamente.
 
 ### 9.2 Alteração administrativa: Pernes
 
@@ -612,9 +670,10 @@ incorporadas na CAOP 2025.
 }
 ```
 
-**Conclusão documentada:** Uma geometria CAOP sem edição e data de referência é
-ambígua quando existem alterações administrativas. O código e o nome, mesmo
-quando se mantêm, não provam que a geometria seja igual entre versões.
+**Limite da evidência:** O caso demonstra que a edição e a data de referência
+são necessárias para contextualizar uma geometria alterada. A manutenção do
+código e do nome, por si só, não demonstra que a geometria seja igual entre
+versões.
 
 ### 9.3 Alterações com novos códigos
 
@@ -625,9 +684,11 @@ para tabelas oficiais de correspondência do INE:
 - [Correspondência estatística — recurso INE 9160](https://smi.ine.pt/Versao/Download/9160)
 - [Correspondência estatística — recurso INE 10698](https://smi.ine.pt/Versao/Download/10698)
 
-**Conclusão documentada:** Alterações administrativas podem afetar simultaneamente
-geometria, designação, hierarquia e identificador. Nenhuma dessas dimensões deve
-ser usada isoladamente para reconciliar versões.
+**Documentado:** No caso descrito pela CAOP 2024.1, as alterações administrativas
+afetaram a organização territorial e implicaram a atribuição de novos códigos.
+
+**Decisão do PTScope:** Geometria, designação, hierarquia ou identificador não
+serão usados isoladamente para reconciliar versões.
 
 ## 10. Relação com GEO API PT e INE
 
@@ -644,7 +705,7 @@ para Porto e Bonfim e declara CAOP 2024.1 como fonte cartográfica.
 aparece com o geocódigo composto `11A1312`. Na CAOP 2025, `dtmn="1312"` e
 `nuts3_cod="11A"` são campos separados.
 
-**Conclusão observada:** Para este exemplo, versão e classificação, é possível
+**Limite da evidência:** Para este exemplo, versão e classificação, é possível
 relacionar os componentes publicados. Isto não autoriza uma regra genérica de
 partição de códigos INE nem prova equivalência entre identificadores de sistemas
 diferentes.
@@ -654,9 +715,9 @@ diferentes.
 **Documentado:** As notas da tabela CAOP 2025 dizem que a associação territorial
 às NUTS segue o Regulamento Delegado (UE) 2023/674 e a Lei n.º 24-A/2022.
 
-**Conclusão documentada:** Uma correspondência CAOP–NUTS deve conservar a versão
-da CAOP e a versão/classificação NUTS. Comparar apenas a designação ou o código
-sem esse contexto é insuficiente.
+**Decisão do PTScope:** Uma correspondência CAOP–NUTS conservará a versão da
+CAOP e a versão/classificação NUTS. O projeto não estabelecerá correspondências
+apenas pela semelhança da designação ou do código.
 
 ### 10.3 Área do Porto
 
@@ -664,11 +725,11 @@ sem esse contexto é insuficiente.
 tabela arredondada. A GEO API PT anteriormente observada, declarando CAOP
 2024.1, publica `Area_T_ha=4145.6`, equivalente a `41.456` km².
 
-**Conclusão observada:** Existe uma diferença de `3.58` ha entre valores ligados
+**Observado:** Existe uma diferença de `3.58` ha entre valores ligados
 a edições e canais distintos. Este estudo não determina se resulta de alteração
 geométrica, processamento, edição da fonte ou outro fator.
 
-**Regra para o PTScope:** Preservar valor, unidade, precisão, versão, recurso e
+**Decisão do PTScope:** Preservar valor, unidade, precisão, versão, recurso e
 proveniência. Não escolher ainda CAOP, GEO API PT ou INE como autoridade para
 área, população ou limites.
 
@@ -683,9 +744,12 @@ municípios e `29` distritos/ilhas. A nota explica que o Corvo é contabilizado
 como freguesia para efeitos estatísticos, apesar de legalmente não possuir
 freguesia, nos termos do artigo 78.º da Lei n.º 9/87.
 
-**Conclusão documentada:** A contagem e a hierarquia estatística podem incluir
-exceções legais. Não se deve impor a regra “todo o município tem pelo menos uma
-freguesia juridicamente constituída” sem modelar o contexto.
+**Documentado:** O caso do Corvo é uma exceção explícita entre a contagem para
+fins estatísticos e a existência jurídica de freguesia.
+
+**Decisão do PTScope:** O projeto não imporá a regra “todo o município tem pelo
+menos uma freguesia juridicamente constituída” sem representar o contexto da
+fonte.
 
 **Observado:** Os schemas da OGC API listam propriedades e tipos, mas as
 respostas consultadas não forneceram uma garantia de não nulabilidade para cada
@@ -704,8 +768,8 @@ As notas de alterações associam edições a diplomas e períodos de vigência.
 com instante inicial, utilizador, motivo, tabelas de cópia e funções de consulta
 temporal.
 
-**Conclusão documentada:** A existência de histórico no modelo interno não
-significa que esse histórico esteja exposto nos downloads ou serviços públicos.
+**Limite da evidência:** A documentação de histórico no modelo interno não
+demonstra que esse histórico esteja exposto nos downloads ou serviços públicos.
 
 **Observado:** A OGC API pública consultada expõe o estado corrente das coleções
 CAOP e não apresentou, nos endpoints estudados, um parâmetro de edição ou data
@@ -736,8 +800,13 @@ confirmada.
 
 **Observado:** No registo continental, datas de etapas da linhagem aparecem como
 2025-01-06, anteriores às Leis n.º 27/2025 e n.º 48/2025 que a CAOP 2025 declara
-incorporar. As datas podem referir etapas diferentes ou resultar de erro de
-metadados; não devem ser usadas como data única de produção.
+incorporar.
+
+**Inferência:** As datas podem referir etapas diferentes ou resultar de erro de
+metadados; a causa não foi confirmada.
+
+**Decisão do PTScope:** Estes valores não serão usados isoladamente como data de
+produção da edição.
 
 **Observado:** Os metadados enumeram Shapefile, GeoPackage, imagens e OGC API
 como formatos. A página atual de download da edição 2025 oferece GeoPackage;
@@ -753,13 +822,16 @@ do modelo e conformidade formal não são equivalentes.
 
 **Observado:** As coleções CAOP 2025 publicam uma extensão temporal entre
 `2000-10-30T18:24:39Z` e `2007-10-30T08:57:29Z`, incompatível à primeira vista
-com a edição 2025. Não foi encontrada explicação oficial; estes valores não
-devem ser tratados como validade temporal da CAOP 2025.
+com a edição 2025. Não foi encontrada explicação oficial.
+
+**Decisão do PTScope:** Enquanto a semântica não for esclarecida, estes valores
+não serão tratados como validade temporal da CAOP 2025.
 
 **Observado:** Uma resposta com um único resultado incluiu uma ligação `next`
-com `offset=1`, embora `numberMatched=1` e `numberReturned=1`. Consumidores não
-devem depender apenas da presença da ligação para concluir que existem mais
-resultados.
+com `offset=1`, embora `numberMatched=1` e `numberReturned=1`.
+
+**Decisão do PTScope:** Uma futura paginação não dependerá apenas da presença da
+ligação para concluir que existem mais resultados.
 
 **Observado:** Uma ligação canónica de coleção foi anunciada com tipo
 `text/csv`, mas o URL apontava para a página HTML de metadados do SNIG. O tipo da
@@ -777,13 +849,14 @@ conjunto de campos que a tabela.
 **Observado:** A codificação de texto varia dentro do pacote das tabelas de
 áreas.
 
-**Conclusão observada:** “CAOP 2025” não identifica sozinho um contrato tabular
-único. O contrato depende do recurso: GeoPackage, CSV/XLSX, OGC API, WMS ou
-metadados.
+**Limite da evidência:** Os recursos observados não partilham um contrato
+tabular único. “CAOP 2025” identifica a edição, mas o contrato técnico depende
+do recurso: GeoPackage, CSV/XLSX, OGC API, WMS ou metadados.
 
 ## 14. Relevância para o PTScope
 
-**Inferência sustentada pelos recursos observados:** A CAOP pode suportar:
+**Avaliação do PTScope, não afirmação da fonte:** Os recursos observados parecem
+adequados para suportar:
 
 - referência espacial versionada para distritos/ilhas, municípios e
   freguesias;
@@ -797,14 +870,15 @@ metadados.
 - visualização por WMS e consulta seletiva por OGC API;
 - rastreabilidade através dos metadados RNDG e da licença por recurso.
 
-**Limitação:** A CAOP descreve limites e unidades administrativas. Não é, por si
-só, fonte de população, atividade económica, contratação pública ou autoridade
-universal para todos os conceitos territoriais usados por outras fontes.
+**Limite da evidência:** Os recursos CAOP estudados descrevem limites e unidades
+administrativas. Não foram observados neles dados de população, atividade
+económica ou contratação pública, nem uma declaração de autoridade sobre
+conceitos produzidos por outras fontes.
 
 **Decisão adiada:** Este estudo não determina qual fonte prevalece em áreas,
-população, códigos compostos ou limites. Uma futura política deve operar por
-conceito, edição, data de referência e finalidade, preservando divergências e
-proveniência.
+população, códigos compostos ou limites. Uma futura política do PTScope deverá
+operar por conceito, edição, data de referência e finalidade, preservando
+divergências e proveniência.
 
 ## 15. Questões abertas
 
@@ -829,27 +903,32 @@ proveniência.
     de Metainformação do INE e geocódigos compostos de cada versão NUTS?
 11. Como devem ser representadas, sem perda, exceções como o Corvo e entidades
     com áreas descontínuas?
-12. Qual é a extensão exata da licença aos ficheiros auxiliares, documentação do
-    modelo e código do repositório GitHub, quando esses recursos não contêm uma
-    licença própria explícita?
+12. Quais são as condições específicas de reutilização das tabelas de áreas e
+    dos restantes ficheiros auxiliares sem licença incorporada ou metadado
+    dedicado?
+13. Que licença se aplica à documentação do modelo e ao código do repositório
+    GitHub quando esses recursos não contêm uma licença própria explícita?
 
 ## 16. Síntese do contrato observável
 
-**Documentado:** A DGT produz e mantém a CAOP; o SNIG/RNDG cataloga e dá acesso;
+**Documentado:** A DGT executa e mantém a CAOP; o SNIG/RNDG cataloga e dá acesso;
 o INE atribui códigos `DTMNFR`; a Assembleia da República determina alterações
 de limites por diploma. Estes papéis são relacionados, mas não intercambiáveis.
 
 **Observado:** A edição 2025 é distribuída por três GeoPackages regionais,
 tabelas nacionais de áreas, WMS regionais e uma OGC API que, nas coleções CAOP
 observadas, cobre o Continente. Os metadados RNDG fornecem linhagem, datas,
-ligações, CRS e `CC BY 4.0`.
+ligações e CRS. Cada um dos três registos regionais declara `CC-BY-4.0` e o
+texto de crédito da DGT; outros recursos apresentam declarações menos
+específicas, descritas na secção 8.
 
-**Documentado e observado:** Códigos, nomes, geometrias, áreas, hierarquias e
-classificações dependem da edição e do recurso. Alterações administrativas podem
-alterar geometrias e códigos. Os campos e a precisão não são idênticos entre
-CSV, API e restantes formatos.
+**Documentado e observado:** Edições diferentes podem refletir alterações
+administrativas, incluindo novos códigos, e os campos e a precisão observados
+não são idênticos entre CSV e OGC API. Não foi demonstrado um contrato único
+para todos os formatos.
 
-**Regra de integração futura:** preservar identificadores como strings; guardar
-edição, cobertura, CRS, unidade, precisão, recurso e proveniência; não reconciliar
-automaticamente valores divergentes; e tratar metadados inconsistentes como
-questões de qualidade, não como factos a normalizar.
+**Decisão do PTScope para uma integração futura:** preservar identificadores
+como strings; guardar edição, cobertura, CRS, unidade, precisão, recurso e
+proveniência; não reconciliar automaticamente valores divergentes; e tratar
+metadados inconsistentes como questões de qualidade, não como factos a
+normalizar.
