@@ -56,22 +56,22 @@ export function BackendStatus() {
   const detail = health.status === "loading" ? "a verificar" : health.detail;
 
   return (
-    <div className="flex min-w-48 items-center gap-3 rounded-lg border border-[#d9e2ec] bg-white px-4 py-3 shadow-sm">
+    <div className="flex min-w-36 items-center gap-2.5 border border-white/15 bg-white/[0.06] px-3 py-2">
       <span
-        className={`h-2.5 w-2.5 rounded-full ${
+        className={`h-2.5 w-2.5 shrink-0 rounded-full ${
           isOnline
-            ? "bg-[#2f855a]"
+            ? "bg-[#72d3a7]"
             : health.status === "loading"
-              ? "bg-[#d69e2e]"
-              : "bg-[#c53030]"
+              ? "bg-[#e2b75f]"
+              : "bg-[#ef8f8f]"
         }`}
         aria-hidden="true"
       />
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#52667a]">
+        <p className="text-[0.65rem] font-semibold uppercase text-[#b9d3c9]">
           API
         </p>
-        <p className="text-sm font-medium text-[#14213d]">{detail}</p>
+        <p className="text-xs font-medium text-white">{detail}</p>
       </div>
     </div>
   );
