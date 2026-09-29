@@ -1,9 +1,8 @@
 import httpx
 import pytest
-from fastapi.testclient import TestClient
-
 from app.main import app
 from app.services import geoapi
+from fastapi.testclient import TestClient
 
 client = TestClient(app)
 
@@ -33,10 +32,34 @@ def test_municipio_is_normalized(monkeypatch: pytest.MonkeyPatch) -> None:
             200,
             {
                 "nome": "Porto",
+                "dtmn": "1312",
                 "codigoine": "1312",
                 "distrito": "Porto",
                 "areaha": "41.29",
                 "geojson": {"properties": {"Area_T_ha": 4145.6}},
+                "geojsons": {
+                    "freguesias": [
+                        {"properties": {"freguesia": "Bonfim"}},
+                        {"properties": {"freguesia": "Campanhã"}},
+                        {"properties": {"freguesia": "Paranhos"}},
+                        {"properties": {"freguesia": "Ramalde"}},
+                        {
+                            "properties": {
+                                "freguesia": "União das freguesias de Aldoar, Foz do Douro e Nevogilde"
+                            }
+                        },
+                        {
+                            "properties": {
+                                "freguesia": "União das freguesias de Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória"
+                            }
+                        },
+                        {
+                            "properties": {
+                                "freguesia": "União das freguesias de Lordelo do Ouro e Massarelos"
+                            }
+                        },
+                    ]
+                },
                 "populacao": 231800,
             },
         )
@@ -48,9 +71,17 @@ def test_municipio_is_normalized(monkeypatch: pytest.MonkeyPatch) -> None:
     assert response.status_code == 200
     assert response.json() == {
         "nome": "Porto",
-        "codigo_ine": "1312",
-        "distrito": "Porto",
-        "area_km2": 41.456,
+        "dtmn": "1312",
+        "codigoine": "1312",
+        "freguesias": [
+            "Bonfim",
+            "Campanhã",
+            "Paranhos",
+            "Ramalde",
+            "União das freguesias de Aldoar, Foz do Douro e Nevogilde",
+            "União das freguesias de Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória",
+            "União das freguesias de Lordelo do Ouro e Massarelos",
+        ],
     }
 
 
@@ -85,33 +116,22 @@ def test_geoapi_unavailable(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_municipio_area_is_converted_from_hectares() -> None:
-    municipio = geoapi._normalize_municipio(  # pylint: disable=protected-access
-        {
-            "nome": "Porto",
-            "geojson": {"properties": {"Area_T_ha": 4145.6}},
-        }
+    area_km2 = geoapi._area_km2(  # pylint: disable=protected-access
+        {"geojson": {"properties": {"Area_T_ha": 4145.6}}}
     )
 
-    assert municipio.area_km2 == 41.456
+    assert area_km2 == 41.456
 
 
 def test_municipio_area_does_not_use_ambiguous_areaha() -> None:
-    municipio = geoapi._normalize_municipio(  # pylint: disable=protected-access
-        {
-            "nome": "Porto",
-            "areaha": "41.29",
-        }
-    )
+    area_km2 = geoapi._area_km2({"areaha": "41.29"})  # pylint: disable=protected-access
 
-    assert municipio.area_km2 is None
+    assert area_km2 is None
 
 
 def test_municipio_area_is_none_when_total_hectares_are_invalid() -> None:
-    municipio = geoapi._normalize_municipio(  # pylint: disable=protected-access
-        {
-            "nome": "Porto",
-            "geojson": {"properties": {"Area_T_ha": "invalid"}},
-        }
+    area_km2 = geoapi._area_km2(  # pylint: disable=protected-access
+        {"geojson": {"properties": {"Area_T_ha": "invalid"}}}
     )
 
-    assert municipio.area_km2 is None
+    assert area_km2 is None

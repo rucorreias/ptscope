@@ -5,3 +5,11 @@ __pycache__
 .git
 .idea
 .env
+frontend/node_modules
+frontend/.next
+frontend/out
+frontend/build
+frontend/coverage
+frontend/.env
+frontend/.env*.local
+frontend/*.tsbuildinfo

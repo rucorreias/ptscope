@@ -26,6 +26,7 @@ Neste momento, o repositório contém um backend mínimo em FastAPI com:
 - um endpoint de health check;
 - um endpoint para consultar dados municipais através da GEO API PT;
 - documentação interativa OpenAPI/Swagger gerada pelo FastAPI;
+- um frontend inicial em Next.js ligado ao health check da API;
 - uma base de documentação em `docs/`.
 
 Outras fontes de dados ainda não estão integradas.
@@ -37,6 +38,12 @@ Outras fontes de dados ainda não estão integradas.
 - Uvicorn
 - Pydantic
 - httpx, reservado para integrações HTTP futuras
+- Node.js 24 LTS
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- Docker Compose
 
 ## Começar
 
@@ -44,6 +51,9 @@ Outras fontes de dados ainda não estão integradas.
 
 - Python 3.12
 - `pip`
+- Node.js 24 LTS
+- npm 11
+- Docker e Docker Compose, para executar a stack em contentores
 
 ### Instalação
 
@@ -53,6 +63,8 @@ cd ptscope
 python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -r backend/requirements.txt
+cd frontend
+npm install
 ```
 
 No Windows PowerShell, ativa o ambiente virtual com:
@@ -70,6 +82,18 @@ uvicorn app.main:app --reload
 
 A API fica disponível em `http://127.0.0.1:8000`.
 
+### Executar o frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+O frontend fica disponível em `http://127.0.0.1:3000`. Por defeito, a rota
+interna do Next.js para o health check usa `http://127.0.0.1:8000` como backend.
+Para apontar para outro backend, copia `frontend/.env.example` para
+`frontend/.env.local` e ajusta `BACKEND_INTERNAL_URL`.
+
 ### Executar com Docker
 
 Na raiz do projeto:
@@ -78,8 +102,10 @@ Na raiz do projeto:
 docker compose up --build
 ```
 
-O volume do backend fica montado no contentor para permitir hot reload durante
-o desenvolvimento.
+O backend fica disponível em `http://127.0.0.1:8000` e o frontend em
+`http://127.0.0.1:3000`. Os volumes de desenvolvimento ficam montados nos
+contentores para permitir hot reload; o serviço frontend espera pelo health
+check do backend antes de arrancar.
 
 ### Executar os testes
 
@@ -97,6 +123,14 @@ Dentro de `backend/`, com o ambiente virtual ativo:
 ```bash
 cd backend
 python -m pylint app tests
+```
+
+Para validar o frontend:
+
+```bash
+cd frontend
+npm run lint
+npm run build
 ```
 
 ## Endpoints
@@ -128,6 +162,12 @@ ptscope/
 │   │   └── main.py     # Aplicação FastAPI
 │   ├── tests/
 │   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── app/        # App Router, paginas e route handlers
+│   │   └── components/ # Componentes React reutilizaveis
+│   ├── Dockerfile
+│   └── package.json
 ├── docs/               # Documentação do projeto
 └── postman/            # Collection e environments para desenvolvimento
 ```

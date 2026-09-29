@@ -1,0 +1,21 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/api/v1/municipios/:nome/freguesias"
+  method: GET
+  pathVariables:
+    nome: "{{municipio_porto}}"
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    date: Mon, 28 Sep 2026 21:43:46 GMT
+    server: uvicorn
+    content-length: "39"
+    content-type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "detail": "Município não encontrado"
+      }
+order: 1790631844761

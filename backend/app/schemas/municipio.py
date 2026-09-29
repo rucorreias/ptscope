@@ -3,6 +3,11 @@ from pydantic import BaseModel
 
 class MunicipioResponse(BaseModel):
     nome: str
+    dtmn: str | None = None
+    codigoine: str | None = None
+    freguesias: list[str] = []
+
+
+class FreguesiaResponse(BaseModel):
+    nome: str
     codigo_ine: str | None = None
-    distrito: str | None = None
-    area_km2: float | None = None

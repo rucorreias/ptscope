@@ -1,0 +1,9 @@
+$kind: http-request
+name: Get Freguesias from Municipio
+url: "{{baseUrl}}/api/v1/municipios/:nome/freguesias"
+method: GET
+pathVariables:
+  - key: nome
+    value: "{{municipio_porto}}"
+examples: .resources/Get Freguesias from Municipio.resources/examples
+order: 1790631770981
