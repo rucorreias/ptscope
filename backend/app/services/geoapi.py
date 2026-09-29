@@ -133,6 +133,10 @@ async def get_freguesias_por_municipio(nome: str) -> list[FreguesiaResponse]:
         payload = response.json()
         if not isinstance(payload, list):
             raise TypeError("Unexpected GEO API PT response")
-        return [_normalize_freguesia(item) for item in payload if isinstance(item, dict)]
+        return [
+            _normalize_freguesia(item)
+            for item in payload
+            if isinstance(item, dict)
+        ]
     except (httpx.HTTPStatusError, TypeError, ValueError) as exc:
         raise GeoApiUnavailableError from exc
