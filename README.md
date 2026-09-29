@@ -5,9 +5,9 @@ stress socioeconómico, tendências futuras e indicadores de risco na contrataç
 pública em Portugal, em preparação para publicação como projeto open source.
 
 > [!NOTE]
-> O PTScope está numa fase inicial de desenvolvimento. A Fase 0 disponibiliza
-> apenas a estrutura base do backend e uma API mínima, ainda sem fontes de dados
-> externas.
+> O PTScope está numa fase inicial de desenvolvimento. O frontend já apresenta
+> navegação e um mapa base; ainda não disponibiliza limites municipais nem
+> indicadores demográficos integrados.
 
 ## Objetivo
 
@@ -210,7 +210,8 @@ abertura formal da comunidade.
 
 ## Documentação
 
-A documentação inicial está em [`docs/README.md`](docs/README.md). Com o backend
+O [plano de entregas](docs/roadmap.md) liga os critérios de v0.1 às issues. A
+documentação está em [`docs/README.md`](docs/README.md). Com o backend
 em execução, o contrato atual da API pode ser explorado em
 [`http://127.0.0.1:8000/docs`](http://127.0.0.1:8000/docs).
 
