@@ -1,8 +1,9 @@
 import httpx
 import pytest
+from fastapi.testclient import TestClient
+
 from app.main import app
 from app.services import geoapi
-from fastapi.testclient import TestClient
 
 client = TestClient(app)
 
@@ -45,17 +46,21 @@ def test_municipio_is_normalized(monkeypatch: pytest.MonkeyPatch) -> None:
                         {"properties": {"freguesia": "Ramalde"}},
                         {
                             "properties": {
-                                "freguesia": "União das freguesias de Aldoar, Foz do Douro e Nevogilde"
+                                "freguesia": "União das freguesias de Aldoar, "
+                                "Foz do Douro e Nevogilde"
                             }
                         },
                         {
                             "properties": {
-                                "freguesia": "União das freguesias de Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória"
+                                "freguesia": "União das freguesias de Cedofeita, "
+                                "Santo Ildefonso, Sé, Miragaia, "
+                                "São Nicolau e Vitória"
                             }
                         },
                         {
                             "properties": {
-                                "freguesia": "União das freguesias de Lordelo do Ouro e Massarelos"
+                                "freguesia": "União das freguesias de Lordelo "
+                                "do Ouro e Massarelos"
                             }
                         },
                     ]
@@ -79,7 +84,8 @@ def test_municipio_is_normalized(monkeypatch: pytest.MonkeyPatch) -> None:
             "Paranhos",
             "Ramalde",
             "União das freguesias de Aldoar, Foz do Douro e Nevogilde",
-            "União das freguesias de Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitória",
+            "União das freguesias de Cedofeita, Santo Ildefonso, Sé, "
+            "Miragaia, São Nicolau e Vitória",
             "União das freguesias de Lordelo do Ouro e Massarelos",
         ],
     }

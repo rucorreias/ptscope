@@ -1,32 +1,15 @@
-# PTScope Wiki
+# Documentação do PTScope
 
-## Visão geral
+O PTScope está numa fase inicial. O backend FastAPI disponibiliza health check e consulta municipal através da GEO API PT. O frontend Next.js já contém navegação entre mapa e dashboards e um mapa base MapLibre. Ainda não estão integrados limites municipais oficiais nem a série de população do INE.
 
-PTScope é uma plataforma pública de inteligência territorial para Portugal.
-Esta base documenta o backend inicial: uma API FastAPI mínima, sem base de
-dados, autenticação ou frontend.
+- [Plano de entregas e issues de v0.1](roadmap.md)
+- [Estudos das fontes](data/sources/): contratos externos, exemplos, limitações e questões abertas
+- [Decisões de ingestão](architecture/data-ingestion.md): proveniência, valores, dimensões, versões territoriais e decisões pendentes
 
-## Backend
+Os estudos das fontes distinguem o que foi documentado, observado e inferido. Uma decisão interna do PTScope pertence a `docs/architecture/`; uma descoberta sobre a fonte pertence a `docs/data/sources/`.
 
-O backend vive em `backend/` e separa responsabilidades de forma simples:
+## Desenvolvimento
 
-- `routes`: endpoints HTTP.
-- `services`: integrações externas, incluindo a GEO API PT.
-- `schemas`: modelos de dados Pydantic.
+O backend fica em `backend/` e separa rotas HTTP, serviços de fonte e schemas Pydantic. A documentação OpenAPI está em `http://127.0.0.1:8000/docs` com o backend em execução. O frontend fica em `frontend/` e apresenta os estados de preparação onde ainda não existem dados integrados.
 
-## API
-
-Quando o backend estiver a correr, a documentação Swagger fica disponível em:
-
-- `http://127.0.0.1:8000/docs`
-
-Endpoints iniciais:
-
-- `GET /`
-- `GET /api/v1/health`
-- `GET /api/v1/municipios/{nome}`
-
-## Integrações
-
-A integração com a GEO API PT está implementada em
-`backend/app/services/geoapi.py` e fornece dados municipais normalizados.
+Para instalação e comandos de execução, consulta o [README principal](../README.md). As tarefas e critérios de conclusão estão nas [issues](https://github.com/rucorreias/ptscope/issues).
