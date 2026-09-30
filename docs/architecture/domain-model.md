@@ -19,20 +19,20 @@ transforma a DGT num terceiro adapter da v0.1.
 
 O [estudo INE](../data/sources/ine.md#61-indicador-0008273) preserva uma
 observação real, filtrada, do Porto em 2023 e a metainformação do indicador
-`0008273`: NUTS 2013, nota geográfica CAOP 2020 e quebra metodológica
+[`0008273`](../data/code-dictionary.md#ine-indicator-0008273): NUTS 2013, nota geográfica CAOP 2020 e quebra metodológica
 2020–2021. O [estudo GEO API
 PT](../data/sources/geoapi.md#5-resposta-real-de-municipioporto) preserva
-`dtmn="1312"` e uma Feature `geojson` do Porto. A [página oficial da GEO
+[`dtmn="1312"`](../data/code-dictionary.md#geoapi-municipality-1312) e uma Feature `geojson` do Porto. A [página oficial da GEO
 API PT](https://geoapi.pt/) identifica a CAOP 2024.1 como origem da informação
 administrativa. Estes exemplos **não** demonstram igualdade entre as
 geometrias das duas edições nem uma regra nacional para relacionar códigos.
 
 O catálogo oficial de dados públicos
-[identifica `0012918`](https://dados.gov.pt/pt/datasets/populacao-residente-n-o-64)
+identifica [`0012918`](../data/code-dictionary.md#ine-indicator-0012918) ([entrada oficial](https://dados.gov.pt/pt/datasets/populacao-residente-n-o-64))
 como indicador anual de população por NUTS 2024, sexo e grupo etário. A
 metainformação e as observações deste indicador ainda não foram obtidas
 diretamente na investigação atual; cobertura municipal, períodos e
-comparabilidade com `0008273` permanecem por verificar.
+comparabilidade com [`0008273`](../data/code-dictionary.md#ine-indicator-0008273) permanecem por verificar.
 
 ## Linguagem do domínio
 
@@ -40,11 +40,11 @@ comparabilidade com `0008273` permanecem por verificar.
 | --- | --- | --- |
 | **Fornecedor técnico** | Serviço por onde chega a resposta: INE ou GEO API PT. | Não implica ser o produtor de cada campo. |
 | **Produtor original / operação** | Entidade e operação estatística ou cartográfica atribuídas à informação, quando conhecidas. | GEO API PT agrega dados de diferentes origens; origem incerta fica assinalada. |
-| **Indicador** | Definição publicada de uma medida, com código externo, unidade, periodicidade, dimensões, classificação e notas metodológicas. | `0008273` e `0012918` são indicadores distintos até existir prova de equivalência. |
+| **Indicador** | Definição publicada de uma medida, com código externo, unidade, periodicidade, dimensões, classificação e notas metodológicas. | [`0008273`](../data/code-dictionary.md#ine-indicator-0008273) e [`0012918`](../data/code-dictionary.md#ine-indicator-0012918) são indicadores distintos até existir prova de equivalência. |
 | **Dimensão do indicador** | Eixo publicado pelo INE, com ordem e classificação/versionamento próprios. | A posição `Dim2` é conhecida para o exemplo, não é regra de todos os indicadores. |
-| **Categoria** | Código, designação, ordem e nível no âmbito de uma dimensão e versão; `T` em sexo não é `T` em grupo etário. | Guardar o código de origem como string; «Total» é seleção explícita. |
+| **Categoria** | Código, designação, ordem e nível no âmbito de uma dimensão e versão; [`T`](../data/code-dictionary.md#ine-sex-t) em sexo não é [`T`](../data/code-dictionary.md#ine-age-t) em grupo etário. | Guardar o código de origem como string; «Total» é seleção explícita. |
 | **Período de referência** | Categoria temporal da observação: código, designação, ordem e frequência. | Não equivale à data de extração, ingestão ou atualização; não inventar datas de início/fim. |
-| **Referência geográfica** | Código e nome publicados, nível, classificação e versão e referência administrativa quando conhecida. | `11A1312` e `1312` são referências distintas; não há identidade universal pelo nome. |
+| **Referência geográfica** | Código e nome publicados, nível, classificação e versão e referência administrativa quando conhecida. | [`11A1312`](../data/code-dictionary.md#ine-geography-11a1312) e [`1312`](../data/code-dictionary.md#geoapi-municipality-1312) são referências distintas; não há identidade universal pelo nome. |
 | **Observação recebida** | Célula publicada para um indicador e a seleção completa das suas dimensões numa extração; conserva valor, apresentação e qualificadores. | A ausência de uma célula numa resposta não é uma observação de valor zero. |
 | **Extração** | Ocorrência de consulta a um recurso, com parâmetros, datas e referência ao payload. | Repetir o pedido pode produzir uma revisão: não substituir silenciosamente a extração anterior. |
 | **Recurso geométrico** | Feature municipal recebida da GEO API PT com código original e contexto cartográfico declarado. | Uma Feature não é uma observação do INE nem representa automaticamente a geografia estatística. |
@@ -66,7 +66,7 @@ publica um identificador interno estável.
   resposta recebida; a chave física fica por decidir.
 - A seleção de **período** e **geografia** pode ser exposta como relação
   especializada para consulta, mantendo o código original e a dimensão de
-  onde veio. A categoria temporal `S7A2023` e a chave `Dados["2023"]`
+  onde veio. A categoria temporal [`S7A2023`](../data/code-dictionary.md#ine-period-s7a2023) e a chave `Dados["2023"]`
   coexistem sem assumir que são intercambiáveis fora deste indicador.
 - Uma **correspondência territorial** liga referências especificadas por
   fornecedor, classificação, versão/edição, nível e código. Exige evidência e
@@ -79,17 +79,17 @@ publica um identificador interno estável.
 - Uma **nota metodológica** deve conservar o seu texto e âmbito (indicador,
   período ou série, conforme publicado). A quebra 2020–2021 deve ser
   apresentada sem fabricar uma taxa de crescimento contínua.
-- Códigos externos mantêm zeros e prefixos, como `0008273`, `11A1312` e
-  `0113`. Valor bruto, valor de apresentação, valor numérico confirmado,
+- Códigos externos mantêm zeros e prefixos, como [`0008273`](../data/code-dictionary.md#ine-indicator-0008273), [`11A1312`](../data/code-dictionary.md#ine-geography-11a1312) e
+  [`0113`](../data/code-dictionary.md#geoapi-municipality-0113). Valor bruto, valor de apresentação, valor numérico confirmado,
   unidade, potência e precisão são campos semanticamente distintos; um
   qualificador desconhecido não é normalizado.
 
 ## Percurso de uma observação verificada
 
 No [pedido INE documentado](../data/sources/ine.md#8-estrutura-dos-dados-reais),
-o indicador `0008273` seleciona período `S7A2023` (chave de resposta
-`2023`), geografia `11A1312` (Porto), sexo `T` (HM) e grupo etário
-`T` (Total). O campo `valor` é `"267236"` e `ind_string` é
+o indicador [`0008273`](../data/code-dictionary.md#ine-indicator-0008273) seleciona período [`S7A2023`](../data/code-dictionary.md#ine-period-s7a2023) (chave de resposta
+`2023`), geografia [`11A1312`](../data/code-dictionary.md#ine-geography-11a1312) (Porto), sexo [`T`](../data/code-dictionary.md#ine-sex-t) (HM) e grupo etário
+[`T`](../data/code-dictionary.md#ine-age-t) (Total). O campo `valor` é `"267236"` e `ind_string` é
 `"267 236"`; a metainformação observada indica unidade `Número (N.º)`,
 potência zero e precisão zero. Preservam-se os valores originais e a data de
 extração publicada na resposta. A transformação para `Decimal("267236")`
@@ -97,8 +97,8 @@ extração publicada na resposta. A transformação para `Decimal("267236")`
 mesma escala.
 
 No [exemplo GEO API PT](../data/sources/geoapi.md#5-resposta-real-de-municipioporto),
-Porto tem `dtmn="1312"` e uma Feature municipal. A associação entre
-`11A1312` e `1312` é apenas candidata até a issue #2 estabelecer uma
+Porto tem [`dtmn="1312"`](../data/code-dictionary.md#geoapi-municipality-1312) e uma Feature municipal. A associação entre
+[`11A1312`](../data/code-dictionary.md#ine-geography-11a1312) e [`1312`](../data/code-dictionary.md#geoapi-municipality-1312) é apenas candidata até a issue #2 estabelecer uma
 correspondência versionada. Mesmo confirmando a relação dos códigos, isso não
 demonstra equivalência geométrica entre CAOP 2020 e 2024.1.
 
@@ -138,14 +138,14 @@ geometria.
 | Ano sem célula devolvida | Cobertura desconhecida/ausente na consulta; verificar filtros e fonte. Não criar zero. |
 | Célula devolvida sem `valor`, com qualificador | Preservar o qualificador e a ausência; nunca calcular a partir de `ind_string` sem regra confirmada. |
 | Mesma seleção em duas extrações | Conservar ambas e as respetivas datas até existir política explícita de revisão/apresentação. |
-| `0008273` versus `0012918` | Dois indicadores e referenciais potencialmente distintos; sem linha única antes de validar metodologia e correspondência. |
-| INE `11A1312` versus GEO API PT `1312` | Duas referências com possível correspondência, sem join automático nem garantia de equivalência geométrica. |
+| [`0008273`](../data/code-dictionary.md#ine-indicator-0008273) versus [`0012918`](../data/code-dictionary.md#ine-indicator-0012918) | Dois indicadores e referenciais potencialmente distintos; sem linha única antes de validar metodologia e correspondência. |
+| INE [`11A1312`](../data/code-dictionary.md#ine-geography-11a1312) versus GEO API PT [`1312`](../data/code-dictionary.md#geoapi-municipality-1312) | Duas referências com possível correspondência, sem join automático nem garantia de equivalência geométrica. |
 | Geometria sem licença/CRS suficientemente esclarecidos | Não publicar camada derivada sem confirmar condições e transformação; o mapa base pode continuar como contexto. |
 
 ## Investigações e decisões pendentes
 
 1. [#1](https://github.com/rucorreias/ptscope/issues/1): disponibilidade real
-   por município/período, `0012918`, qualificadores e revisões. A
+   por município/período, [`0012918`](../data/code-dictionary.md#ine-indicator-0012918), qualificadores e revisões. A
    metainformação direta do INE não respondeu nesta consulta; um resultado
    indexado ou um catálogo não substitui uma resposta observada.
 2. [#2](https://github.com/rucorreias/ptscope/issues/2): correspondências INE

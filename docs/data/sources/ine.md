@@ -1,5 +1,7 @@
 # INE Portugal: descoberta de dados
 
+Os exemplos literais deste estudo preservam a sintaxe dos dados. Códigos externos presentes nesses exemplos: [`0008273`](../code-dictionary.md#ine-indicator-0008273), [`S7A2023`](../code-dictionary.md#ine-period-s7a2023), [`11A1312`](../code-dictionary.md#ine-geography-11a1312).
+
 As decisões de arquitetura e ingestão derivadas desta investigação são mantidas em:
 docs/architecture/data-ingestion.md
 
@@ -48,9 +50,9 @@ de metainformação `bddXplorer`, indicadas nas secções respetivas.
 
 **Observado:** foram efetuados poucos pedidos `GET`, deliberadamente filtrados:
 
-- metainformação completa do indicador `0008273`;
-- metainformação completa do indicador `0010006`;
-- uma observação do indicador `0008273`, para o Porto, 2023, ambos os sexos e
+- metainformação completa do indicador [`0008273`](../code-dictionary.md#ine-indicator-0008273);
+- metainformação completa do indicador [`0010006`](../code-dictionary.md#ine-indicator-0010006);
+- uma observação do indicador [`0008273`](../code-dictionary.md#ine-indicator-0008273), para o Porto, 2023, ambos os sexos e
   total de grupos etários.
 
 Não foi descarregado o catálogo integral nem qualquer conjunto de dados em
@@ -138,11 +140,11 @@ Existem três caminhos complementares para descobrir indicadores:
 **Observado:** o mesmo identificador aparece como `varcd` na API, como
 `IndicadorCod` no JSON, como `indOcorrCod` em URLs do portal e como “Código de
 difusão” no SMI. Tem sete caracteres e pode começar por zero, por exemplo
-`0008273`. Deve ser armazenado como texto.
+[`0008273`](../code-dictionary.md#ine-indicator-0008273). Deve ser armazenado como texto.
 
 **Observado:** o identificador interno da página do SMI não é o código de
-difusão. Por exemplo, a página SMI `17818` corresponde ao código de difusão
-`0012910`. Ambos podem ser úteis para proveniência, mas não são
+difusão. Por exemplo, a página SMI [`17818`](../code-dictionary.md#ine-smi-17818) corresponde ao código de difusão
+[`0012910`](../code-dictionary.md#ine-indicator-0012910). Ambos podem ser úteis para proveniência, mas não são
 intermutáveis.
 
 Uma implementação cliente atual, usada apenas como referência secundária,
@@ -173,17 +175,17 @@ granularidades, fontes e versões territoriais diferentes.
 
 | Código | Indicador resumido | Frequência | Geografia relevante | Motivo |
 |---|---|---|---|---|
-| `0008273` | População residente por sexo e grupo etário | Anual | NUTS 2013 até município | Caso municipal diretamente consultado. |
-| `0012910` | Índice de dependência de idosos | Anual | NUTS 2024 | Mostra a nova versão territorial e indicador separado do equivalente NUTS 2013. |
-| `0012234` | Valor mediano das vendas de alojamentos, últimos 12 meses | Trimestral | NUTS 2024; relevante ao nível local | Preço por m² e frequência trimestral. |
-| `0010042` | Valor mediano de avaliação bancária da habitação | Mensal | Município 2013 | Caso municipal mensal e exemplo histórico de confidencialidade. |
-| `0013012` | Ganho/remuneração por trabalhador | Anual | NUTS 2024 | A fonte estatística é MTSSS/GEP, embora a difusão seja feita pelo INE. |
-| `0010006` | Idade média ao óbito por sexo e causa de morte | Anual | Portugal a NUTS III | Muitas categorias; não chega a município. |
-| `0010003` | Orçamento do Estado financiado por impostos cobrados internamente | Anual | Portugal | Caso simples, percentual e decimal. |
-| `0002642` | Superfície das unidades territoriais | Anual | NUTS 2001 | Unidade km², fonte DGT e relação explícita com a CAOP anual. |
+| [`0008273`](../code-dictionary.md#ine-indicator-0008273) | População residente por sexo e grupo etário | Anual | NUTS 2013 até município | Caso municipal diretamente consultado. |
+| [`0012910`](../code-dictionary.md#ine-indicator-0012910) | Índice de dependência de idosos | Anual | NUTS 2024 | Mostra a nova versão territorial e indicador separado do equivalente NUTS 2013. |
+| [`0012234`](../code-dictionary.md#ine-indicator-0012234) | Valor mediano das vendas de alojamentos, últimos 12 meses | Trimestral | NUTS 2024; relevante ao nível local | Preço por m² e frequência trimestral. |
+| [`0010042`](../code-dictionary.md#ine-indicator-0010042) | Valor mediano de avaliação bancária da habitação | Mensal | Município 2013 | Caso municipal mensal e exemplo histórico de confidencialidade. |
+| [`0013012`](../code-dictionary.md#ine-indicator-0013012) | Ganho/remuneração por trabalhador | Anual | NUTS 2024 | A fonte estatística é MTSSS/GEP, embora a difusão seja feita pelo INE. |
+| [`0010006`](../code-dictionary.md#ine-indicator-0010006) | Idade média ao óbito por sexo e causa de morte | Anual | Portugal a NUTS III | Muitas categorias; não chega a município. |
+| [`0010003`](../code-dictionary.md#ine-indicator-0010003) | Orçamento do Estado financiado por impostos cobrados internamente | Anual | Portugal | Caso simples, percentual e decimal. |
+| [`0002642`](../code-dictionary.md#ine-indicator-0002642) | Superfície das unidades territoriais | Anual | NUTS 2001 | Unidade km², fonte DGT e relação explícita com a CAOP anual. |
 
 Pelo menos três são diretamente municipais ou relevantes para análise
-municipal: `0008273`, `0010042` e `0012234`. O indicador `0012910` usa uma
+municipal: [`0008273`](../code-dictionary.md#ine-indicator-0008273), [`0010042`](../code-dictionary.md#ine-indicator-0010042) e [`0012234`](../code-dictionary.md#ine-indicator-0012234). O indicador [`0012910`](../code-dictionary.md#ine-indicator-0012910) usa uma
 classificação geográfica hierárquica NUTS 2024; o nível municipal efetivamente
 disponível deve ser confirmado na metainformação antes de ingestão.
 
@@ -191,17 +193,19 @@ disponível deve ser confirmado na metainformação antes de ingestão.
 dimensão, operações/fontes estatísticas e classificações específicas.
 
 **Observado:** nem todos os indicadores incluem todos os níveis geográficos. O
-`0008273` inclui 308 municípios; o `0010006` termina em NUTS III.
+[`0008273`](../code-dictionary.md#ine-indicator-0008273) inclui 308 municípios; o [`0010006`](../code-dictionary.md#ine-indicator-0010006) termina em NUTS III.
 
 ## 6. Metainformação detalhada
 
 ### 6.1. Indicador `0008273`
 
+Entrada no [dicionário: `0008273`](../code-dictionary.md#ine-indicator-0008273).
+
 Metainformação devolvida diretamente por `pindicaMeta.jsp`:
 
 | Campo | Valor observado |
 |---|---|
-| `IndicadorCod` | `0008273` |
+| `IndicadorCod` | [`0008273`](../code-dictionary.md#ine-indicator-0008273) |
 | `IndicadorNome` | População residente (N.º) por Local de residência (NUTS - 2013), Sexo e Grupo etário; Anual - INE, Estimativas anuais da população residente |
 | `Periodic` | `Anual` |
 | `PrimeiroPeriodo` | `2011` |
@@ -215,9 +219,9 @@ Metainformação devolvida diretamente por `pindicaMeta.jsp`:
 Dimensões:
 
 1. Período de referência dos dados, versão `XXXXX`;
-2. Local de residência (NUTS - 2013), versão `03505`;
-3. Sexo, versão `00305`;
-4. Grupo etário, versão `00708`.
+2. Local de residência (NUTS - 2013), versão [`03505`](../code-dictionary.md#ine-version-03505);
+3. Sexo, versão [`00305`](../code-dictionary.md#ine-version-00305);
+4. Grupo etário, versão [`00708`](../code-dictionary.md#ine-version-00708).
 
 **Observado:** a nota da dimensão temporal informa que as estimativas desde
 2021 têm base administrativa, enquanto as estimativas até 2020 são definitivas
@@ -229,11 +233,13 @@ NUTS 2013, em vigor no sistema estatístico desde 1 de janeiro de 2015.
 
 ### 6.2. Indicador `0010006`
 
+Entrada no [dicionário: `0010006`](../code-dictionary.md#ine-indicator-0010006).
+
 Metainformação devolvida diretamente por `pindicaMeta.jsp`:
 
 | Campo | Valor observado |
 |---|---|
-| `IndicadorCod` | `0010006` |
+| `IndicadorCod` | [`0010006`](../code-dictionary.md#ine-indicator-0010006) |
 | `IndicadorNome` | Idade média ao óbito (Ano) por Local de residência (NUTS - 2013), Sexo e Causa de morte (Lista OCDE adaptada); Anual - INE, Óbitos por causas de morte |
 | `Periodic` | `Anual` |
 | `PrimeiroPeriodo` | `2018` |
@@ -246,19 +252,21 @@ Metainformação devolvida diretamente por `pindicaMeta.jsp`:
 Dimensões:
 
 1. Período de referência;
-2. Local de residência (NUTS - 2013), versão `03505`;
-3. Sexo, versão `00305`;
-4. Causa de morte (Lista OCDE adaptada), versão `03622`.
+2. Local de residência (NUTS - 2013), versão [`03505`](../code-dictionary.md#ine-version-03505);
+3. Sexo, versão [`00305`](../code-dictionary.md#ine-version-00305);
+4. Causa de morte (Lista OCDE adaptada), versão [`03622`](../code-dictionary.md#ine-version-03622).
 
 **Observado:** a geografia contém 36 categorias, do país até NUTS III, e não
 contém municípios. A causa de morte contém 55 categorias, incluindo o total.
 
 A [página correspondente no SMI](https://smi.ine.pt/Indicador/Detalhes_TabIndicador/13835?clear=True)
-associa o código de difusão `0010006` à variável de medida “Idade média ao
+associa o código de difusão [`0010006`](../code-dictionary.md#ine-indicator-0010006) à variável de medida “Idade média ao
 óbito (Ano)” e às variáveis de dimensão de tempo, local de residência, sexo e
 causa de morte.
 
 ### 6.3. Indicador `0002642`
+
+Entrada no [dicionário: `0002642`](../code-dictionary.md#ine-indicator-0002642).
 
 A [metainformação oficial](https://ine.pt/bddXplorer/htdocs/minfo.jsp?lingua=PT&var_cd=0002642)
 descreve a superfície em km² das unidades territoriais, com fonte
@@ -274,15 +282,15 @@ atemporal do território.
 
 No SMI:
 
-- [`0012910`](https://smi.ine.pt/Indicador/Detalhes_TabIndicador/17818?clear=True)
+- [`0012910`](../code-dictionary.md#ine-indicator-0012910) ([fonte oficial](https://smi.ine.pt/Indicador/Detalhes_TabIndicador/17818?clear=True))
   tem periodicidade anual, fonte “INE, Estimativas anuais da população
   residente”, variável de medida “Índice de dependência de idosos (N.º)” e
   dimensão “Local de residência (NUTS - 2024)”.
-- [`0012234`](https://smi.ine.pt/Indicador/Detalhes_TabIndicador/18376?clear=True)
+- [`0012234`](../code-dictionary.md#ine-indicator-0012234) ([fonte oficial](https://smi.ine.pt/Indicador/Detalhes_TabIndicador/18376?clear=True))
   tem periodicidade trimestral, fonte “INE, Estatísticas de preços da
   habitação ao nível local (Metodologia 2022)”, medida em `€/m²` e dimensões de
   período, localização NUTS 2024 e categoria do alojamento.
-- [`0013012`](https://smi.ine.pt/Indicador/Detalhes/18662?modal=1) usa localização
+- [`0013012`](../code-dictionary.md#ine-indicator-0013012) ([fonte oficial](https://smi.ine.pt/Indicador/Detalhes/18662?modal=1)) usa localização
   NUTS 2024 e tem como fonte MTSSS/GEP, Quadros de pessoal.
 
 **Observado:** a API de metainformação destes indicadores não foi reconsultada
@@ -291,11 +299,13 @@ e lista completa de categorias ficam por confirmar antes da integração.
 
 ### 6.5. Pesquisa pontual sobre `0012918` para v0.1 (30-09-2026)
 
-**Observado no catálogo oficial [dados.gov.pt](https://dados.gov.pt/pt/datasets/populacao-residente-n-o-64):** a entrada publicada pelo INE identifica `0012918` como «População residente (N.º) por Local de residência (NUTS - 2024), Sexo e Grupo etário; Anual - INE, Estimativas anuais da população residente» e remete para a [página do indicador no INE](https://www.ine.pt/xurl/indx/0012918/PT). O catálogo confirma a identidade e o título publicados; não fornece, nessa consulta, a lista completa de categorias nem observações municipais.
+Entrada no [dicionário: `0012918`](../code-dictionary.md#ine-indicator-0012918).
 
-**Limite da observação:** a consulta direta à metainformação JSON `pindicaMeta.jsp?varcd=0012918&lang=PT` não produziu resposta utilizável nesta investigação (timeout). Não foi feito download de dados, repetição intensiva nem comparação célula a célula. Períodos disponíveis, códigos de município, qualifiers, revisões, versão concreta da dimensão, e continuidade com `0008273` continuam **por confirmar diretamente no INE**. Um resultado de pesquisa indexado não substitui uma extração reproduzível.
+**Observado no catálogo oficial [dados.gov.pt](https://dados.gov.pt/pt/datasets/populacao-residente-n-o-64):** a entrada publicada pelo INE identifica [`0012918`](../code-dictionary.md#ine-indicator-0012918) como «População residente (N.º) por Local de residência (NUTS - 2024), Sexo e Grupo etário; Anual - INE, Estimativas anuais da população residente» e remete para a [página do indicador no INE](https://www.ine.pt/xurl/indx/0012918/PT). O catálogo confirma a identidade e o título publicados; não fornece, nessa consulta, a lista completa de categorias nem observações municipais.
 
-**Implicação em aberto para a investigação:** `0012918` é candidato a uma série separada para anos recentes; o PTScope não junta este indicador a `0008273` sem confrontar definições, metodologia, períodos e geografia. Ver [modelo conceptual do domínio](../../architecture/domain-model.md) e [issue #1](https://github.com/rucorreias/ptscope/issues/1).
+**Limite da observação:** a consulta direta à metainformação JSON `pindicaMeta.jsp?varcd=0012918&lang=PT` não produziu resposta utilizável nesta investigação (timeout). Não foi feito download de dados, repetição intensiva nem comparação célula a célula. Períodos disponíveis, códigos de município, qualifiers, revisões, versão concreta da dimensão, e continuidade com [`0008273`](../code-dictionary.md#ine-indicator-0008273) continuam **por confirmar diretamente no INE**. Um resultado de pesquisa indexado não substitui uma extração reproduzível.
+
+**Implicação em aberto para a investigação:** [`0012918`](../code-dictionary.md#ine-indicator-0012918) é candidato a uma série separada para anos recentes; o PTScope não junta este indicador a [`0008273`](../code-dictionary.md#ine-indicator-0008273) sem confrontar definições, metodologia, períodos e geografia. Ver [modelo conceptual do domínio](../../architecture/domain-model.md) e [issue #1](https://github.com/rucorreias/ptscope/issues/1).
 
 ## 7. Dimensões e categorias
 
@@ -311,12 +321,12 @@ categorias de cada dimensão. Nos casos observados, uma categoria inclui:
 | `categ_ord` | Ordem publicada pelo INE. |
 | `categ_nivel` | Nível hierárquico dentro da classificação. |
 
-No indicador `0008273` foram observadas:
+No indicador [`0008273`](../code-dictionary.md#ine-indicator-0008273) foram observadas:
 
 - 13 categorias temporais, de 2011 a 2023;
 - 344 categorias geográficas;
-- 3 categorias de sexo: `T`/HM, `1`/H e `2`/M;
-- 19 categorias de grupo etário, incluindo `T`/Total.
+- 3 categorias de sexo: [`T`](../code-dictionary.md#ine-sex-t)/HM, [`1`](../code-dictionary.md#ine-sex-1)/H e [`2`](../code-dictionary.md#ine-sex-2)/M;
+- 19 categorias de grupo etário, incluindo [`T`](../code-dictionary.md#ine-age-t)/Total.
 
 A dimensão geográfica organiza-se em cinco níveis:
 
@@ -387,7 +397,7 @@ Aspetos do contrato observados:
   `DataUltimaAtualizacao` na metainformação e `DataUltimoAtualizacao` nos dados.
 
 **Observado (fonte secundária):** um exemplo atual do indicador nacional
-`0010003` apresenta um valor decimal como:
+[`0010003`](../code-dictionary.md#ine-indicator-0010003) apresenta um valor decimal como:
 
 ```json
 {
@@ -399,7 +409,7 @@ Aspetos do contrato observados:
 ```
 
 **Observado (histórico, fonte secundária):** uma resposta publicada para o
-indicador mensal `0010042` continha, num registo confidencial, `sinal_conv` e
+indicador mensal [`0010042`](../code-dictionary.md#ine-indicator-0010042) continha, num registo confidencial, `sinal_conv` e
 `sinal_conv_desc`, sem o campo `valor`:
 
 ```json
@@ -470,15 +480,15 @@ não deve ser confundida com zero nem com uma falha de transporte.
 
 ## 11. Dimensão temporal
 
-No indicador anual `0008273`:
+No indicador anual [`0008273`](../code-dictionary.md#ine-indicator-0008273):
 
-- o código interno da categoria é `S7A2023`;
+- o código interno da categoria é [`S7A2023`](../code-dictionary.md#ine-period-s7a2023);
 - a designação é `2023`;
 - a ordem observada é equivalente a `20230101`;
 - a chave correspondente em `Dados` é `2023`.
 
 **Observado (histórico, fonte secundária):** em indicadores mensais aparecem
-códigos no formato `S3A202006`, enquanto a resposta agrupa os dados sob uma
+códigos no formato [`S3A202006`](../code-dictionary.md#ine-period-s3a202006), enquanto a resposta agrupa os dados sob uma
 chave como `202006` e pode apresentar o mês por extenso em `UltimoPref`.
 
 **Documentado:** os indicadores analisados incluem periodicidades anual,
@@ -487,7 +497,7 @@ incluindo semestral, decenal e não periódica.
 
 | Aspeto | Estado |
 |---|---|
-| Código anual `S7A<AAAA>` | **Observado** no indicador `0008273`. |
+| Código anual `S7A<AAAA>` | **Observado** no indicador [`0008273`](../code-dictionary.md#ine-indicator-0008273). |
 | Código mensal `S3A<AAAAMM>` | **Observado** em exemplo histórico. |
 | Código trimestral | Não confirmado nesta análise. |
 | Data inicial/final exata do período | Não aparece como tal nas observações consultadas. |
@@ -501,27 +511,27 @@ subdivisão cega da string.
 
 ## 12. Geografia e níveis territoriais
 
-O indicador `0008273` demonstra que a geografia do INE é uma dimensão
+O indicador [`0008273`](../code-dictionary.md#ine-indicator-0008273) demonstra que a geografia do INE é uma dimensão
 hierárquica e versionada:
 
 | Nível observado | Exemplo | Designação |
 |---|---|---|
-| País | `PT` | Portugal |
-| NUTS I | `1` | Continente |
-| NUTS II | `11` | Norte |
-| NUTS III | `11A` | Área Metropolitana do Porto |
-| Município | `11A1312` | Porto |
+| País | [`PT`](../code-dictionary.md#ine-geography-pt) | Portugal |
+| NUTS I | [`1`](../code-dictionary.md#ine-geography-1) | Continente |
+| NUTS II | [`11`](../code-dictionary.md#ine-geography-11) | Norte |
+| NUTS III | [`11A`](../code-dictionary.md#ine-geography-11a) | Área Metropolitana do Porto |
+| Município | [`11A1312`](../code-dictionary.md#ine-geography-11a1312) | Porto |
 
 **Observado:** a dimensão continha uma categoria de país, três de NUTS I, sete
 de NUTS II, 25 de NUTS III e 308 municípios.
 
-O código municipal composto `11A1312` inclui o caminho NUTS III `11A` e o
-sufixo municipal `1312`. A GEO API PT apresenta o Porto como `1312`.
+O código municipal composto [`11A1312`](../code-dictionary.md#ine-geography-11a1312) inclui o caminho NUTS III [`11A`](../code-dictionary.md#ine-geography-11a) e o
+sufixo municipal [`1312`](../code-dictionary.md#geoapi-municipality-1312). A GEO API PT apresenta o Porto como [`1312`](../code-dictionary.md#geoapi-municipality-1312).
 
 **Inferência:** existe uma correspondência útil entre o sufixo municipal do
 indicador NUTS 2013 e o código municipal CAOP/INE usado pela GEO API PT. Isto
-não autoriza preencher `1312` com zeros nem assumir que todos os códigos INE
-têm sete dígitos. `1312` e `11A1312` pertencem a contextos de classificação
+não autoriza preencher [`1312`](../code-dictionary.md#geoapi-municipality-1312) com zeros nem assumir que todos os códigos INE
+têm sete dígitos. [`1312`](../code-dictionary.md#geoapi-municipality-1312) e [`11A1312`](../code-dictionary.md#ine-geography-11a1312) pertencem a contextos de classificação
 diferentes.
 
 O distrito não aparece na hierarquia observada do indicador. Outros
@@ -550,17 +560,17 @@ Eurostat](https://ec.europa.eu/eurostat/web/nuts/history/) indica que a NUTS
 
 No SMI, as versões observadas incluem:
 
-- `V03505`, hierarquia NUTS 2013 com município e freguesia;
-- `V05257`, hierarquia NUTS 2024 correspondente;
-- `V04479`, associação NUTS 2013/CAOP 2020;
-- `V05320`, associação NUTS 2024/CAOP 2020.
+- [`V03505`](../code-dictionary.md#ine-version-v03505), hierarquia NUTS 2013 com município e freguesia;
+- [`V05257`](../code-dictionary.md#ine-version-v05257), hierarquia NUTS 2024 correspondente;
+- [`V04479`](../code-dictionary.md#ine-version-v04479), associação NUTS 2013/CAOP 2020;
+- [`V05320`](../code-dictionary.md#ine-version-v05320), associação NUTS 2024/CAOP 2020.
 
-Na API JSON, a versão de dimensão surge sem o prefixo `V`, por exemplo `03505`.
+Na API JSON, a versão de dimensão surge sem o prefixo `V`, por exemplo [`03505`](../code-dictionary.md#ine-version-03505).
 
 **Observado:** existem indicadores separados para a mesma família conceptual
 quando muda a versão territorial. O SMI relaciona, por exemplo, ocorrências do
 índice de dependência de idosos em NUTS 2013 e em NUTS 2024; o código NUTS 2024
-é `0012910`.
+é [`0012910`](../code-dictionary.md#ine-indicator-0012910).
 
 **Documentado:** quando uma classificação NUTS é alterada, o Eurostat prevê a
 substituição de séries históricas pela nova desagregação quando isso seja
@@ -579,11 +589,11 @@ distinguem referenciais estáticos e referenciais “flutuantes”, nos quais as
 alterações administrativas posteriores são consideradas segundo a CAOP e a
 data de referência.
 
-**Documentado:** no indicador `0002642`, a área de cada ano está associada à
+**Documentado:** no indicador [`0002642`](../code-dictionary.md#ine-indicator-0002642), a área de cada ano está associada à
 CAOP em vigor em 31 de dezembro. Noutras publicações, extrações durante o ano
 podem usar a geografia válida em 31 de dezembro do ano anterior.
 
-**Observado:** a metainformação de `0008273` liga explicitamente a série NUTS
+**Observado:** a metainformação de [`0008273`](../code-dictionary.md#ine-indicator-0008273) liga explicitamente a série NUTS
 2013 à CAOP 2020 no contexto dos Censos 2021. A designação “NUTS 2013” não é,
 por si só, suficiente para determinar o recorte administrativo de todos os
 níveis locais.
@@ -612,7 +622,7 @@ Unidades encontradas nos indicadores analisados incluem `Número (N.º)`,
 `Percentagem (%)`, `Ano (Ano)`, `Euro por metro quadrado (€/m²)` e `Quilómetro
 quadrado (km²)`.
 
-**Observado:** `0008273` tem potência `0` e precisão `0`; `0010006` tem
+**Observado:** [`0008273`](../code-dictionary.md#ine-indicator-0008273) tem potência `0` e precisão `0`; [`0010006`](../code-dictionary.md#ine-indicator-0010006) tem
 potência `0` e precisão `1`. Páginas oficiais de outros indicadores apresentam
 potência `3`, incluindo indicadores monetários.
 
@@ -662,13 +672,13 @@ todos os dados.
 
 | Indicador | Fornecedor de difusão | Fonte/operação indicada |
 |---|---|---|
-| `0008273` | INE | INE, Estimativas anuais da população residente |
-| `0012910` | INE | INE, Estimativas anuais da população residente |
-| `0012234` | INE | INE, Estatísticas de preços da habitação ao nível local, Metodologia 2022 |
-| `0013012` | INE | MTSSS/GEP, Quadros de pessoal |
-| `0010006` | INE | INE, Óbitos por causas de morte |
-| `0002642` | INE | Direção-Geral do Território |
-| `0010003` | INE | Direção-Geral do Orçamento/Ministério das Finanças, segundo a metainformação associada |
+| [`0008273`](../code-dictionary.md#ine-indicator-0008273) | INE | INE, Estimativas anuais da população residente |
+| [`0012910`](../code-dictionary.md#ine-indicator-0012910) | INE | INE, Estimativas anuais da população residente |
+| [`0012234`](../code-dictionary.md#ine-indicator-0012234) | INE | INE, Estatísticas de preços da habitação ao nível local, Metodologia 2022 |
+| [`0013012`](../code-dictionary.md#ine-indicator-0013012) | INE | MTSSS/GEP, Quadros de pessoal |
+| [`0010006`](../code-dictionary.md#ine-indicator-0010006) | INE | INE, Óbitos por causas de morte |
+| [`0002642`](../code-dictionary.md#ine-indicator-0002642) | INE | Direção-Geral do Território |
+| [`0010003`](../code-dictionary.md#ine-indicator-0010003) | INE | Direção-Geral do Orçamento/Ministério das Finanças, segundo a metainformação associada |
 
 **Inferência:** a proveniência mínima de uma ingestão deverá incluir:
 
@@ -749,14 +759,14 @@ ordem e o subconjunto de categorias publicado.
 
 O número de observações cresce como produto das categorias das dimensões.
 
-Para `0008273`, a metainformação observada contém:
+Para [`0008273`](../code-dictionary.md#ine-indicator-0008273), a metainformação observada contém:
 
 ```text
 13 períodos × 344 geografias × 3 sexos × 19 grupos etários
 = 254 904 células teóricas
 ```
 
-Para `0010006`:
+Para [`0010006`](../code-dictionary.md#ine-indicator-0010006):
 
 ```text
 2 períodos × 36 geografias × 3 sexos × 55 causas
@@ -812,7 +822,7 @@ concreto e a eventuais componentes de terceiros.
 | Dimensões | Campos específicos do endpoint | Classificações genéricas e versionadas |
 | Unidade/metodologia | Parcial; existem campos ambíguos como `areaha` | Unidade, precisão, potência, conceitos e notas metodológicas |
 | Revisões | Não avaliadas como séries estatísticas | Parte explícita do processo estatístico |
-| Código do Porto | `1312` | `11A1312` no indicador NUTS 2013 analisado |
+| Código do Porto | [`1312`](../code-dictionary.md#geoapi-municipality-1312) | [`11A1312`](../code-dictionary.md#ine-geography-11a1312) no indicador NUTS 2013 analisado |
 
 Para população e censos, o INE deve ser preferido como fonte estatística
 primária quando forem necessárias definição, dimensão, período, revisão e
@@ -963,8 +973,8 @@ questões:
 ## 26. Recomendações para a próxima fase
 
 1. Começar por um conjunto pequeno de indicadores aprovados, incluindo um
-   anual municipal (`0008273`), um mensal municipal (`0010042`) e um trimestral
-   local (`0012234`).
+   anual municipal ([`0008273`](../code-dictionary.md#ine-indicator-0008273)), um mensal municipal ([`0010042`](../code-dictionary.md#ine-indicator-0010042)) e um trimestral
+   local ([`0012234`](../code-dictionary.md#ine-indicator-0012234)).
 2. Criar primeiro um cliente de metainformação; nenhum indicador deve ser
    ingerido sem dimensões, categorias, unidade, precisão e notas.
 3. Aplicar concorrência muito baixa, timeout explícito, retry limitado e

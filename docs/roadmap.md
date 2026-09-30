@@ -10,7 +10,7 @@ O backend FastAPI disponibiliza health check e consulta municipal pela GEO API P
 
 **Pergunta do utilizador:** como evoluiu a população residente de um município em todos os períodos que conseguimos verificar e explicar?
 
-Entregar a primeira experiência completa: selecionar município e período, consultar a série histórica verificada, ver geometria municipal recebida da GEO API PT quando as condições de utilização e o contexto estiverem confirmados; associar valores INE ao mapa apenas com correspondência territorial validada e consultar definição, unidade, dimensões, fonte, datas e limitações. Marcar a quebra metodológica de 2020–2021 na série `0008273`; não calcular uma taxa transversal à quebra sem regra justificada. Investigar `0012918` como possível extensão recente, mantendo os indicadores separados até demonstrar comparabilidade. Um ano sem valor ou um município sem correspondência não recebe zero nem um polígono escolhido pelo nome.
+Entregar a primeira experiência completa: selecionar município e período, consultar a série histórica verificada, ver geometria municipal recebida da GEO API PT quando as condições de utilização e o contexto estiverem confirmados; associar valores INE ao mapa apenas com correspondência territorial validada e consultar definição, unidade, dimensões, fonte, datas e limitações. Marcar a quebra metodológica de 2020–2021 na série [`0008273`](data/code-dictionary.md#ine-indicator-0008273); não calcular uma taxa transversal à quebra sem regra justificada. Investigar [`0012918`](data/code-dictionary.md#ine-indicator-0012918) como possível extensão recente, mantendo os indicadores separados até demonstrar comparabilidade. Um ano sem valor ou um município sem correspondência não recebe zero nem um polígono escolhido pelo nome.
 
 O [modelo conceptual do domínio](architecture/domain-model.md) é uma entrega explícita de v0.1: descreve indicador, observação, dimensões, período, geografia versionada, correspondência territorial e proveniência. Pode ser esboçado em paralelo com a investigação (#1 e #2), mas os exemplos reais devem validá-lo antes de fechar o contrato da API (#3). Isto não define ainda tabelas, ORM nem uma base de dados.
 
@@ -30,7 +30,7 @@ O [modelo conceptual do domínio](architecture/domain-model.md) é uma entrega e
 
 | Etapa proposta | Resultado e condição |
 | --- | --- |
-| v0.2 — Comparações | Comparar municípios e períodos, com fórmulas documentadas e tratamento explícito de mudanças metodológicas e territoriais. Não pressupor continuidade entre `0008273` e `0012918`. |
+| v0.2 — Comparações | Comparar municípios e períodos, com fórmulas documentadas e tratamento explícito de mudanças metodológicas e territoriais. Não pressupor continuidade entre [`0008273`](data/code-dictionary.md#ine-indicator-0008273) e [`0012918`](data/code-dictionary.md#ine-indicator-0012918). |
 | v0.3 — Segundo tema | Selecionar e estudar um dataset concreto antes de integrar uma nova fonte. E-REDES é candidata para energia, sujeita a verificação de licença, unidade, cobertura e geografia. Definir a [política de autoridade e conflitos por conceito](https://github.com/rucorreias/ptscope/issues/8) antes de conciliar fontes concorrentes. |
 
 ## Decisões que esta etapa não força

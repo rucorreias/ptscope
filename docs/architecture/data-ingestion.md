@@ -63,7 +63,7 @@ Todos os códigos provenientes de fontes externas (identificadores territoriais,
 - Não remover prefixos.
 - Não assumir comprimentos universais.
 
-**Justificação:** Códigos como `1312`, `11A1312`, `0008273` e `S7A2023` representam identificadores em contextos e classificações diferentes; qualquer alteração destrutiva compromete a ligação com a fonte original.
+**Justificação:** Códigos como [`1312`](../data/code-dictionary.md#geoapi-municipality-1312), [`11A1312`](../data/code-dictionary.md#ine-geography-11a1312), [`0008273`](../data/code-dictionary.md#ine-indicator-0008273) e [`S7A2023`](../data/code-dictionary.md#ine-period-s7a2023) representam identificadores em contextos e classificações diferentes; qualquer alteração destrutiva compromete a ligação com a fonte original.
 
 ---
 
@@ -101,12 +101,12 @@ Uma observação deve referenciar a combinação completa de categorias relevant
 Para evitar inferências erradas sobre a validade dos dados, a dimensão temporal deve ser preservada de forma granular:
 
 **Campos a preservar separadamente:**
-- `period_code`: O código original da categoria temporal (ex: `S7A2023`).
+- `period_code`: O código original da categoria temporal (ex: [`S7A2023`](../data/code-dictionary.md#ine-period-s7a2023)).
 - `period_label`: A designação humana (ex: `2023`).
 - `period_order`: A ordem de ordenação publicada pela fonte.
 - `frequency`: A periodicidade (anual, trimestral, etc.).
 
-**Regra de Derivação:** Não derivar datas automaticamente de códigos (ex: `S7A2023` $\rightarrow$ `2023-01-01`) sem uma regra de negócio validada e explicitamente documentada para aquela periodicidade e fonte.
+**Regra de Derivação:** Não derivar datas automaticamente de códigos (ex: [`S7A2023`](../data/code-dictionary.md#ine-period-s7a2023) $\rightarrow$ `2023-01-01`) sem uma regra de negócio validada e explicitamente documentada para aquela periodicidade e fonte.
 
 ---
 
@@ -120,7 +120,7 @@ Uma geografia externa deve preservar o contexto completo da sua origem para evit
 - `external_code`
 
 **Exemplo de Ambiguidade:**
-Os códigos `1312` e `11A1312` podem referir-se territorialmente ao Porto, mas pertencem a contextos e classificações diferentes. Não são identificadores automaticamente intercambiáveis.
+Os códigos [`1312`](../data/code-dictionary.md#geoapi-municipality-1312) e [`11A1312`](../data/code-dictionary.md#ine-geography-11a1312) podem referir-se territorialmente ao Porto, mas pertencem a contextos e classificações diferentes. Não são identificadores automaticamente intercambiáveis.
 
 O PTScope deve permitir a definição de correspondências explícitas e versionadas entre diferentes entidades territoriais.
 

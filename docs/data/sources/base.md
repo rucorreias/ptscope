@@ -1,5 +1,8 @@
 # Portal BASE: descoberta de dados
 
+Os exemplos literais deste estudo preservam a sintaxe dos dados. Códigos externos presentes nesses exemplos: [`PT11A`](../code-dictionary.md#base-nuts-pt11a), [`PT150`](../code-dictionary.md#base-nuts-pt150), [`PTZZZ`](../code-dictionary.md#base-nuts-ptzzz), [`72210000-0`](../code-dictionary.md#base-cpv-72210000-0), [`12380006`](../code-dictionary.md#base-idcontrato-12380006), [`8111559`](../code-dictionary.md#base-idprocedimento-8111559), [`30230000-0`](../code-dictionary.md#base-cpv-30230000-0).
+
+
 > Data da análise: 25 de setembro de 2026.
 > Âmbito: investigação da fonte e do seu contrato observável. Este documento
 > não implementa uma integração, não define o modelo final de dados do PTScope
@@ -395,10 +398,10 @@ preservados como strings.
 
 | Campo | Objeto | Forma observada | Nota |
 |---|---|---|---|
-| `idcontrato` | Contrato | Dígitos em string, por exemplo `12380006` | Identificador de ligação usado também nas modificações. |
-| `idprocedimento` | Procedimento | Dígitos em string, por exemplo `8111559` | Um procedimento pode originar vários contratos. |
+| `idcontrato` | Contrato | Dígitos em string, por exemplo [`12380006`](../code-dictionary.md#base-idcontrato-12380006) | Identificador de ligação usado também nas modificações. |
+| `idprocedimento` | Procedimento | Dígitos em string, por exemplo [`8111559`](../code-dictionary.md#base-idprocedimento-8111559) | Um procedimento pode originar vários contratos. |
 | `nAnuncio` | Anúncio | String como `1/2026`; pode ser vazia no contrato | Número público do anúncio. |
-| `IdIncm`/`idINCM` | Anúncio | Dígitos em string, por exemplo `419938349` | A capitalização varia entre recursos/documentação. |
+| `IdIncm`/`idINCM` | Anúncio | Dígitos em string, por exemplo [`419938349`](../code-dictionary.md#base-idincm-419938349) | A capitalização varia entre recursos/documentação. |
 | `nifEntidade` | Entidade | NIF/NIPC em string ou marcador `-` | Não identifica todas as entidades. |
 | `numAcordoQuadro` | Acordo-quadro | String ou string vazia | Sem formato estável confirmado. |
 | ID de recurso dados.gov.pt | Recurso de download | UUID | Identifica o recurso de distribuição, não um registo BASE. |
@@ -732,7 +735,7 @@ município ou freguesia em campos separados.
 mesmo array. Em 23 dos 277 registos existia pelo menos uma repetição.
 
 Não foi confirmada qualquer equivalência entre os nomes do BASE e códigos INE,
-CAOP ou geografias estudadas noutras fontes. O código `PT11A` é NUTS, não um
+CAOP ou geografias estudadas noutras fontes. O código [`PT11A`](../code-dictionary.md#base-nuts-pt11a) é NUTS, não um
 código municipal. A versão NUTS não aparece no registo.
 
 **Inferência:** análises territoriais são possíveis, mas exigirão preservação
