@@ -1,6 +1,6 @@
 # Plano de entregas do PTScope
 
-> Plano de trabalho, não declaração de funcionalidades já publicadas. Estado revisto em 29 de setembro de 2026, a partir do `main` em `f36aa842`. As [issues](https://github.com/rucorreias/ptscope/issues) registam as tarefas e critérios de conclusão.
+> Este plano descreve o que falta entregar; as funcionalidades listadas ainda não estão todas disponíveis. O estado do código foi revisto em 29 de setembro de 2026 (`main` em `f36aa842`). Consulta as [issues](https://github.com/rucorreias/ptscope/issues) para ver as tarefas e os critérios de conclusão.
 
 ## Estado atual
 
@@ -10,29 +10,31 @@ O backend FastAPI disponibiliza health check e consulta municipal pela GEO API P
 
 **Pergunta do utilizador:** como evoluiu a população residente de um município em todos os períodos que conseguimos verificar e explicar?
 
-Entregar a primeira experiência completa: selecionar município e período, consultar a série histórica verificada, ver um mapa com limites oficiais versionados quando houver correspondência territorial segura e consultar definição, unidade, dimensões, fonte, datas e limitações. Marcar a quebra metodológica de 2020–2021 na série `0008273`; não calcular uma taxa transversal à quebra sem regra justificada. Investigar `0012918` como possível extensão recente, mantendo os indicadores separados até demonstrar comparabilidade. Um ano sem valor ou um município sem correspondência não recebe zero nem um polígono escolhido pelo nome.
+Na primeira versão, a pessoa poderá escolher um município e um período, ver os valores confirmados e consultar a definição do indicador, a unidade, a fonte, as datas e as limitações. A geometria municipal virá da GEO API PT quando as condições de uso e o contexto estiverem confirmados. Um valor do INE só será mostrado nesse município do mapa depois de validarmos a ligação entre os códigos territoriais.
 
-O modelo conceptual de domínio é uma entrega explícita de v0.1: descreve indicador, observação, dimensões, período, geografia versionada, correspondência territorial e proveniência. Pode ser esboçado em paralelo com a investigação (#1 e #2), mas os exemplos reais devem validá-lo antes de fechar o contrato da API (#3). Isto não define ainda tabelas, ORM nem uma base de dados.
+A série [`0008273`](data/code-dictionary.md#ine-indicator-0008273) tem uma quebra metodológica entre 2020 e 2021: vamos assinalá-la e evitar cálculos que atravessem essa quebra sem uma regra justificada. Vamos investigar [`0012918`](data/code-dictionary.md#ine-indicator-0012918) para anos recentes, sem juntar as séries antes de confirmar que são comparáveis. Um ano sem valor não vira zero; um município sem correspondência não recebe um polígono escolhido apenas pelo nome.
+
+O [modelo de domínio](architecture/domain-model.md) explica o que é um indicador, uma observação, um período, uma referência geográfica e a origem de cada dado. É um rascunho enquanto investigamos as fontes ([#1](https://github.com/rucorreias/ptscope/issues/1) e [#2](https://github.com/rucorreias/ptscope/issues/2)). Vamos validá-lo com respostas reais antes de definir o contrato da API ([#3](https://github.com/rucorreias/ptscope/issues/3)). As tabelas da base de dados ficam para uma decisão posterior.
 
 | Ordem | Entrega verificável | Issue |
 | --- | --- | --- |
 | 1, em paralelo | Confirmar períodos, categorias, valores e eventuais revisões; estudar a extensão recente | [#1](https://github.com/rucorreias/ptscope/issues/1) |
-| 1, em paralelo | Validar códigos INE e limites CAOP com cobertura e exceções explícitas | [#2](https://github.com/rucorreias/ptscope/issues/2) |
+| 1, em paralelo | Validar referências municipais INE ↔ GEO API PT, incluindo diferenças entre referenciais e casos sem correspondência | [#2](https://github.com/rucorreias/ptscope/issues/2) |
 | 2 | Validar o modelo conceptual de domínio com exemplos reais; depois especificar dashboard e contrato da API | [#3](https://github.com/rucorreias/ptscope/issues/3) |
 | 3, em paralelo | Implementar adapter INE e endpoint com testes offline | [#4](https://github.com/rucorreias/ptscope/issues/4) |
-| 3, em paralelo | Apresentar limites municipais oficiais e atribuídos no mapa | [#5](https://github.com/rucorreias/ptscope/issues/5) |
+| 3, em paralelo | Apresentar geometria municipal da GEO API PT com origem e condições de uso identificadas | [#5](https://github.com/rucorreias/ptscope/issues/5) |
 | 4 | Ligar o dashboard aos dados e ao mapa apenas para correspondências validadas | [#6](https://github.com/rucorreias/ptscope/issues/6) |
 | Ao longo da entrega | Adicionar validação frontend ao CI e fechar a lista de evidências da versão | [#7](https://github.com/rucorreias/ptscope/issues/7) |
 
-**Critério para publicar v0.1:** uma pessoa consegue seguir a evolução municipal verificada, compreender os períodos ausentes e a quebra metodológica, identificar a edição geográfica e rastrear o valor até à fonte. Os testes e lint do backend e o lint/build do frontend passam no CI. A licença e a atribuição das geometrias apresentadas estão documentadas. Os campos `0.1.0` existentes nas aplicações são metadados de desenvolvimento e não significam que a versão foi publicada.
+**Quando podemos publicar a v0.1:** a pessoa consegue ver a evolução confirmada de um município, perceber os anos em falta e a quebra metodológica e chegar à fonte de cada valor. A edição geográfica, as condições de uso e as limitações das geometrias estão documentadas. Os testes e verificações do backend e do frontend passam no CI. O número `0.1.0` que já aparece nas aplicações é apenas um identificador de desenvolvimento; não significa que a versão esteja publicada.
 
 ## Depois de v0.1
 
 | Etapa proposta | Resultado e condição |
 | --- | --- |
-| v0.2 — Comparações | Comparar municípios e períodos, com fórmulas documentadas e tratamento explícito de mudanças metodológicas e territoriais. Não pressupor continuidade entre `0008273` e `0012918`. |
+| v0.2 — Comparações | Comparar municípios e períodos, com fórmulas documentadas e tratamento explícito de mudanças metodológicas e territoriais. Não pressupor continuidade entre [`0008273`](data/code-dictionary.md#ine-indicator-0008273) e [`0012918`](data/code-dictionary.md#ine-indicator-0012918). |
 | v0.3 — Segundo tema | Selecionar e estudar um dataset concreto antes de integrar uma nova fonte. E-REDES é candidata para energia, sujeita a verificação de licença, unidade, cobertura e geografia. Definir a [política de autoridade e conflitos por conceito](https://github.com/rucorreias/ptscope/issues/8) antes de conciliar fontes concorrentes. |
 
 ## Decisões que esta etapa não força
 
-A passagem de dados da API para o frontend não exige já PostgreSQL, PostGIS, ORM, migrações, jobs ou Redis. O modelo conceptual e o contrato da API vêm antes do modelo físico; uma forma limitada e reprodutível de obter os dados de v0.1 é suficiente enquanto a decisão de persistência nasce dos requisitos e das observações reais. As descobertas sobre fontes pertencem a `docs/data/sources/`; as decisões internas a `docs/architecture/`.
+Para esta fase, ainda não precisamos de escolher PostgreSQL, PostGIS, ORM, migrações, jobs ou Redis. Primeiro confirmamos os dados e definimos o contrato da API; depois decidimos como os guardar. Na v0.1, os dados integrados vêm apenas do INE e da GEO API PT. A DGT/CAOP fica registada como origem cartográfica declarada, sem integração direta. Os estudos das fontes estão em `docs/data/sources/` e as decisões do PTScope em `docs/architecture/`.

@@ -1,5 +1,7 @@
 # GEO API PT: descoberta de dados
 
+Os exemplos literais deste estudo preservam a sintaxe dos dados. Códigos externos presentes nesses exemplos: [`1312`](../code-dictionary.md#geoapi-municipality-1312).
+
 As decisões de arquitetura e ingestão derivadas desta investigação são mantidas em:
 docs/architecture/data-ingestion.md
 
@@ -104,8 +106,8 @@ foi testado nesta análise.
 
 | Elemento | Campo(s) observado(s) | Forma |
 |---|---|---|
-| Município | `dtmn`, `codigoine`, `geojson.properties.Dicofre` | String com 4 caracteres: Porto `1312`, Lisboa `1106`, Oliveira de Azeméis `0113`. |
-| Freguesia | `dtmnfr`, `codigoine`, `Dicofre`, `DICOFRE` | String com 6 caracteres: Bonfim `131202`. |
+| Município | `dtmn`, `codigoine`, `geojson.properties.Dicofre` | String com 4 caracteres: Porto [`1312`](../code-dictionary.md#geoapi-municipality-1312), Lisboa [`1106`](../code-dictionary.md#geoapi-municipality-1106), Oliveira de Azeméis [`0113`](../code-dictionary.md#geoapi-municipality-0113). |
+| Freguesia | `dtmnfr`, `codigoine`, `Dicofre`, `DICOFRE` | String com 6 caracteres: Bonfim [`131202`](../code-dictionary.md#geoapi-parish-131202). |
 | Distrito/ilha | `distrito`, `distrito_ilha`, `Distrito` | Nome textual, com duplicação e variação de capitalização da chave. |
 | NIF | `nif` | String de 9 caracteres associada ao município/câmara, não um código territorial. |
 | Relação pai-filho | `municipio`, `Concelho`, `distrito_ilha`, `Distrito` | Nomes repetidos na Feature da freguesia; o prefixo de `dtmnfr` coincide com `dtmn` nos exemplos. |
@@ -236,7 +238,7 @@ As Features de freguesia acrescentam `id`, `dtmnfr`, `freguesia`,
   universo ou obter confirmação do fornecedor.
 - **CRS:** não existe membro `crs` e a documentação não declara um EPSG.
   **Inferência:** a ordem e os valores são longitude/latitude e são compatíveis
-  com WGS 84, mas `EPSG:4326` não foi confirmado pelo fornecedor.
+  com WGS 84, mas [`EPSG:4326`](../code-dictionary.md#epsg-4326) não foi confirmado pelo fornecedor.
 - **Bounding box:** quatro números, observacionalmente na ordem
   `[min longitude, min latitude, max longitude, max latitude]`.
 - **Centros:** são arrays `[longitude, latitude]`. A API não explica o algoritmo
@@ -316,7 +318,7 @@ oficiais subjacentes.
 
 | Observação | Porto | Lisboa | Oliveira de Azeméis |
 |---|---:|---:|---:|
-| Código municipal | `1312` | `1106` | `0113` |
+| Código municipal | [`1312`](../code-dictionary.md#geoapi-municipality-1312) | [`1106`](../code-dictionary.md#geoapi-municipality-1106) | [`0113`](../code-dictionary.md#geoapi-municipality-0113) |
 | Freguesias | 7 | 24 | 13 |
 | População 2011 | 237 591 | 547 733 | 68 611 |
 | População 2021 | 231 800 | 545 796 | 66 175 |

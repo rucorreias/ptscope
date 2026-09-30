@@ -1,23 +1,23 @@
-# Ingestão de Dados: Decisões de Arquitetura
+# Ingestão de dados: decisões de arquitetura
 
-Este documento regista decisões técnicas do PTScope derivadas da investigação das fontes de dados. Não descreve o contrato original das APIs; para isso consultar `docs/data/sources/`.
+Aqui ficam as regras que o PTScope segue ao receber e tratar dados. Para saber o que cada API devolve, consulta os [estudos das fontes](../data/sources/). O [modelo de domínio](domain-model.md) explica como estas regras se aplicam à v0.1.
 
-**Distinção Fundamental:**
+**Onde procurar informação:**
 
-- **Facto da fonte** $\rightarrow$ documentado em `docs/data/sources/`
-- **Decisão PTScope** $\rightarrow$ documentada em `docs/architecture/data-ingestion.md`
+- Os [estudos das fontes](../data/sources/) registam o que foi documentado ou observado nas APIs.
+- Este documento regista o que decidimos fazer no PTScope com essa informação.
 
 ---
 
 ## 1. Proveniência como Requisito Obrigatório
 
-Cada dado ingerido deve possuir metadados de proveniência rigorosos para garantir a auditabilidade e a possibilidade de reprocessamento. É obrigatório registar:
+Para conseguirmos explicar de onde veio um valor e voltar a processá-lo, guardamos:
 
-- **Provider:** O fornecedor técnico da resposta (ex: `GEO API PT`, `INE`).
-- **Fonte/Produtor Original:** A entidade que produziu o dado (ex: `DGT`, `INE`, `IPMA`).
-- **Dataset/Operação Estatística:** Quando aplicável, a operação específica (ex: `Estimativas anuais da população residente`).
-- **Endpoint:** O URL e parâmetros da consulta efetuada.
-- **Identificador Externo:** O código original da fonte (ex: código de difusão do indicador).
+- **Fornecedor:** A API que respondeu (por exemplo, `GEO API PT` ou `INE`).
+- **Produtor original:** Quem produziu o dado, quando conhecido (por exemplo, `DGT` ou `INE`).
+- **Conjunto de dados ou operação estatística:** Por exemplo, `Estimativas anuais da população residente`.
+- **Pedido feito à API:** O URL e os parâmetros usados.
+- **Código original:** Por exemplo, o código de difusão de um indicador.
 - **Datas:**
     - Data de referência do dado.
     - Data de extração da fonte.
@@ -32,20 +32,20 @@ Sempre que possível, devem ser preservados adicionalmente:
 
 ## 2. Preservação de Dados Brutos
 
-Para evitar a perda de informação por transformações irreversíveis, o PTScope deve preservar o valor original recebido antes de qualquer normalização.
+Guardar o valor recebido antes de o converter. Assim, podemos voltar a verificar uma conversão ou corrigir uma regra sem perder a resposta original.
 
 **Exemplo de fluxos de valor (INE):**
 - `raw_value`: O valor tal como recebido no campo `valor` (ex: `"66.08"`).
 - `display_value`: O valor formatado para exibição, se fornecido (ex: `ind_string` $\rightarrow$ `"66,08"`).
 - `normalized_value`: O valor convertido para tipo numérico (ex: `Decimal("66.08")`).
 
-A coluna `normalized_value` apenas deve ser preenchida quando a transformação estiver semanticamente confirmada e validada.
+Preencher `normalized_value` só quando estiver confirmado o significado do valor e a regra de conversão.
 
 ---
 
 ## 3. Tipos Numéricos e Precisão
 
-Para garantir a integridade de dados estatísticos e evitar erros de arredondamento binário:
+Para não introduzir erros de arredondamento nos valores estatísticos:
 
 - **Valores Estatísticos:** Utilizar obrigatoriamente `Decimal` (ou `numeric` em SQL) para valores que exijam precisão.
 - **Proibição de Float:** Evitar o uso de `float` como representação persistida de estatísticas.
@@ -55,35 +55,37 @@ Para garantir a integridade de dados estatísticos e evitar erros de arredondame
 
 ## 4. Tratamento de Códigos Externos
 
-Todos os códigos provenientes de fontes externas (identificadores territoriais, códigos de indicadores, etc.) devem ser tratados estritamente como **strings**.
+Guardar códigos externos como **texto**. Isto inclui indicadores e identificadores territoriais, mesmo quando têm apenas algarismos.
 
-**Proibições:**
+**Não fazer:**
 - Não converter automaticamente para inteiro.
 - Não preencher com zeros à esquerda (`padding`) para atingir comprimentos fixos.
 - Não remover prefixos.
 - Não assumir comprimentos universais.
 
-**Justificação:** Códigos como `1312`, `11A1312`, `0008273` e `S7A2023` representam identificadores em contextos e classificações diferentes; qualquer alteração destrutiva compromete a ligação com a fonte original.
+**Porquê?** [`1312`](../data/code-dictionary.md#geoapi-municipality-1312), [`11A1312`](../data/code-dictionary.md#ine-geography-11a1312), [`0008273`](../data/code-dictionary.md#ine-indicator-0008273) e [`S7A2023`](../data/code-dictionary.md#ine-period-s7a2023) identificam coisas diferentes. Mudar um código pode impedir-nos de encontrar a informação original. Consulta o [dicionário de códigos](../data/code-dictionary.md) para ver o contexto de cada um.
 
 ---
 
 ## 5. Modelo Conceptual: Indicadores e Observações
 
-O PTScope adota a distinção conceptual entre a definição do dado e a sua ocorrência:
+O [rascunho do modelo conceptual de domínio da v0.1](domain-model.md) aplica estas regras a observações INE e à informação territorial da GEO API PT. Distingue referências geográficas e extrações sem decidir ainda o contrato da API nem o esquema da base de dados.
 
-- **Indicator:** Representa a definição estatística (metadados, unidade, periodicidade, fonte, metodologia).
-- **Observation:** Representa uma célula concreta no espaço dimensional de um indicador.
 
-**Exemplo de composição de uma Observação:**
-`Indicator (0008273)` + `Período (2023)` + `Geografia (11A1312)` + `Sexo (HM)` + `Grupo Etário (Total)` $\rightarrow$ `Valor (267236)`.
+É útil separar a **definição do que se mede** do **valor publicado para um caso concreto**:
+
+- **Indicador:** Define a medida, unidade, periodicidade, fonte e metodologia.
+- **Observação:** É o valor (ou a indicação de que não está disponível) para uma combinação de categorias desse indicador.
+
+**Exemplo:** o indicador [`0008273`](../data/code-dictionary.md#ine-indicator-0008273), no período de 2023, para a geografia INE [`11A1312`](../data/code-dictionary.md#ine-geography-11a1312) (Porto), ambos os sexos e todas as idades, tem o valor observado de 267 236. A categoria de período é [`S7A2023`](../data/code-dictionary.md#ine-period-s7a2023); `2023` é a chave usada na resposta.
 
 ---
 
 ## 6. Dimensões Genéricas e Flexíveis
 
-O PTScope **não** utilizará um modelo de tabela rígida (ex: colunas fixas para `year`, `municipality`, `sex`, `age`).
+O PTScope não deve assumir que todos os indicadores têm as mesmas colunas (como `year`, `municipality`, `sex` e `age`).
 
-**Justificação:** Os indicadores possuem dimensões arbitrárias e variáveis (ex: `causa de morte`, `categoria de alojamento`, `atividade económica`).
+**Porquê?** Um indicador pode ter sexo e idade; outro pode ter causa de morte, categoria de alojamento ou atividade económica.
 
 **Abordagem:**
 O modelo deve suportar uma estrutura hierárquica e dinâmica:
@@ -98,12 +100,12 @@ Uma observação deve referenciar a combinação completa de categorias relevant
 Para evitar inferências erradas sobre a validade dos dados, a dimensão temporal deve ser preservada de forma granular:
 
 **Campos a preservar separadamente:**
-- `period_code`: O código original da categoria temporal (ex: `S7A2023`).
+- `period_code`: O código original da categoria temporal (ex: [`S7A2023`](../data/code-dictionary.md#ine-period-s7a2023)).
 - `period_label`: A designação humana (ex: `2023`).
 - `period_order`: A ordem de ordenação publicada pela fonte.
 - `frequency`: A periodicidade (anual, trimestral, etc.).
 
-**Regra de Derivação:** Não derivar datas automaticamente de códigos (ex: `S7A2023` $\rightarrow$ `2023-01-01`) sem uma regra de negócio validada e explicitamente documentada para aquela periodicidade e fonte.
+**Regra:** [`S7A2023`](../data/code-dictionary.md#ine-period-s7a2023) não indica, por si só, que o período começou em `2023-01-01`. Só calcular datas de início ou fim quando existir uma regra confirmada para essa fonte e periodicidade.
 
 ---
 
@@ -116,16 +118,16 @@ Uma geografia externa deve preservar o contexto completo da sua origem para evit
 - `administrative_reference`
 - `external_code`
 
-**Exemplo de Ambiguidade:**
-Os códigos `1312` e `11A1312` podem referir-se territorialmente ao Porto, mas pertencem a contextos e classificações diferentes. Não são identificadores automaticamente intercambiáveis.
+**Exemplo:**
+Os códigos [`1312`](../data/code-dictionary.md#geoapi-municipality-1312) e [`11A1312`](../data/code-dictionary.md#ine-geography-11a1312) podem referir-se territorialmente ao Porto, mas pertencem a contextos e classificações diferentes. Não são identificadores automaticamente intercambiáveis.
 
-O PTScope deve permitir a definição de correspondências explícitas e versionadas entre diferentes entidades territoriais.
+Uma ligação entre códigos territoriais precisa de fonte, classificação, versão e prova dessa correspondência.
 
 ---
 
 ## 9. Revisões e Histórico
 
-Dados estatísticos podem ser revistos retroativamente pelo produtor. A ingestão não deve assumir que a mesma chave implica um overwrite destrutivo.
+A fonte pode corrigir valores antigos. Se a mesma combinação de indicador, período e categorias aparecer de novo, não apagar silenciosamente a resposta anterior.
 
 O sistema deve preservar informação suficiente para reconstruir alterações e rastrear a evolução dos dados. Mecanismos a considerar incluem:
 
@@ -141,7 +143,7 @@ O sistema deve preservar informação suficiente para reconstruir alterações e
 Devemos preservar o payload original (ou uma referência imutável ao mesmo) para:
 
 - Auditoria de valores.
-- Debugging de transformações.
+- Investigar erros nas conversões.
 - Reprocessamento total após alteração de regras.
 - Evolução do parser sem necessidade de nova extração.
 
@@ -211,7 +213,9 @@ Para o INE, as fixtures deverão cobrir cenários como:
 
 ---
 
-## 15. Do Not Infer
+<a id="15-do-not-infer"></a>
+
+## 15. Não inferir sem confirmação
 
 O PTScope **não deve** realizar as seguintes transformações automaticamente sem confirmação documental explícita:
 
@@ -226,8 +230,7 @@ O PTScope **não deve** realizar as seguintes transformações automaticamente s
 - Transformar dado confidencial, ausente ou não disponível em zero.
 - Derivar períodos através de parsing cego de códigos.
 
-**Regra Geral:**
-`Semântica desconhecida` $\rightarrow$ `Preservar valor bruto` $\rightarrow$ `Não produzir valor normalizado` $\rightarrow$ `Registar questão em aberto`.
+**Regra geral:** se ainda não sabemos o que um campo significa, guardar a resposta original, não criar um valor convertido e registar o que falta confirmar.
 
 ---
 

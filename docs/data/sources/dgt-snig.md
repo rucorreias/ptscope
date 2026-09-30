@@ -1,5 +1,8 @@
 # DGT, SNIG e Carta Administrativa Oficial de Portugal (CAOP)
 
+Os exemplos literais deste estudo preservam a sintaxe dos dados. Códigos externos presentes nesses exemplos: [`1312`](../code-dictionary.md#geoapi-municipality-1312), [`141614`](../code-dictionary.md#dgt-parish-141614), [`1D3`](../code-dictionary.md#dgt-nuts-1d3).
+
+
 ## 1. Âmbito e método
 
 Este documento descreve o contrato observável das fontes oficiais da
@@ -231,8 +234,8 @@ usa tipos textuais: até dois caracteres para distrito/ilha, quatro para
 município, oito para entidade administrativa e três, quatro e cinco para NUTS
 1, 2 e 3.
 
-**Observado:** Na distribuição CAOP 2025, Porto surge como município `1312` e
-Bonfim como freguesia `131202`. Os valores são strings nos schemas da OGC API.
+**Observado:** Na distribuição CAOP 2025, Porto surge como município [`1312`](../code-dictionary.md#geoapi-municipality-1312) e
+Bonfim como freguesia [`131202`](../code-dictionary.md#geoapi-parish-131202). Os valores são strings nos schemas da OGC API.
 
 **Decisão estabelecida do PTScope:** Os identificadores serão preservados como
 strings. Não devem ser convertidos para inteiro, preenchidos, truncados ou
@@ -300,20 +303,20 @@ regra específica ainda não consta de `data-ingestion.md`.
 
 | Cobertura | CRS documentado |
 | --- | --- |
-| Continente | PT-TM06/ETRS89, EPSG:3763 |
-| Madeira | PTRA08-UTM/ITRF93, EPSG:5016 |
-| Açores, grupo ocidental | PTRA08-UTM/ITRF93, EPSG:5014 |
-| Açores, grupos central e oriental | PTRA08-UTM/ITRF93, EPSG:5015 |
-| Sedes administrativas | ETRS89, EPSG:4258 |
+| Continente | PT-TM06/ETRS89, [`EPSG:3763`](../code-dictionary.md#epsg-3763) |
+| Madeira | PTRA08-UTM/ITRF93, [`EPSG:5016`](../code-dictionary.md#epsg-5016) |
+| Açores, grupo ocidental | PTRA08-UTM/ITRF93, [`EPSG:5014`](../code-dictionary.md#epsg-5014) |
+| Açores, grupos central e oriental | PTRA08-UTM/ITRF93, [`EPSG:5015`](../code-dictionary.md#epsg-5015) |
+| Sedes administrativas | ETRS89, [`EPSG:4258`](../code-dictionary.md#epsg-4258) |
 
-**Documentado:** Os metadados RNDG da CAOP 2025 indicam EPSG:3763 e EPSG:4258
-para o Continente; EPSG:5014, EPSG:5015, EPSG:5013 e EPSG:4326 para os Açores;
-e EPSG:5016, EPSG:5013 e EPSG:4326 para a Madeira. A presença de vários CRS nos
+**Documentado:** Os metadados RNDG da CAOP 2025 indicam [`EPSG:3763`](../code-dictionary.md#epsg-3763) e [`EPSG:4258`](../code-dictionary.md#epsg-4258)
+para o Continente; [`EPSG:5014`](../code-dictionary.md#epsg-5014), [`EPSG:5015`](../code-dictionary.md#epsg-5015), [`EPSG:5013`](../code-dictionary.md#epsg-5013) e [`EPSG:4326`](../code-dictionary.md#epsg-4326) para os Açores;
+e [`EPSG:5016`](../code-dictionary.md#epsg-5016), [`EPSG:5013`](../code-dictionary.md#epsg-5013) e [`EPSG:4326`](../code-dictionary.md#epsg-4326) para a Madeira. A presença de vários CRS nos
 metadados não confirma que todas as camadas ou formatos estejam disponíveis em
 todos eles.
 
-**Observado:** A coleção `municipios` da OGC API anuncia CRS84, EPSG:4326,
-EPSG:3857, EPSG:4258 e EPSG:3763, com EPSG:3763 como CRS de armazenamento. O
+**Observado:** A coleção `municipios` da OGC API anuncia CRS84, [`EPSG:4326`](../code-dictionary.md#epsg-4326),
+[`EPSG:3857`](../code-dictionary.md#epsg-3857), [`EPSG:4258`](../code-dictionary.md#epsg-4258) e [`EPSG:3763`](../code-dictionary.md#epsg-3763), com [`EPSG:3763`](../code-dictionary.md#epsg-3763) como CRS de armazenamento. O
 pedido do Porto sem parâmetro `crs` devolveu `Content-Crs` correspondente a
 CRS84.
 
@@ -474,10 +477,10 @@ operações de escrita.
 
 | Campo | Tipo observado | Exemplo Porto |
 | --- | --- | --- |
-| `dtmn` | string; identificador | `1312` |
+| `dtmn` | string; identificador | [`1312`](../code-dictionary.md#geoapi-municipality-1312) |
 | `municipio` | string | `Porto` |
 | `distrito_ilha` | string | `Porto` |
-| `nuts3_cod` | string | `11A` |
+| `nuts3_cod` | string | [`11A`](../code-dictionary.md#ine-geography-11a) |
 | `nuts3` | string | `Área Metropolitana do Porto` |
 | `nuts2` | string | `Norte` |
 | `nuts1` | string | `Continente` |
@@ -682,7 +685,7 @@ Resposta minimizada observada:
 Isso não demonstra uma regra universal para todas as coleções.
 
 **Observado:** O filtro das freguesias por município devolveu sete elementos.
-Bonfim surgiu com `dtmnfr="131202"`, `area_ha=309.63` e
+Bonfim surgiu com [`dtmnfr="131202"`](../code-dictionary.md#geoapi-parish-131202), `area_ha=309.63` e
 `perimetro_km=10`.
 
 **Observado:** A soma dos `area_ha` publicados com duas casas decimais para as
@@ -751,13 +754,13 @@ Versionamento](../../architecture/data-ingestion.md#8-geografia-e-versionamento)
 **Documentado no ecossistema DGT/INE:** A responsabilidade de atribuição de
 `DTMNFR` é do INE; a DGT incorpora esses códigos na CAOP.
 
-**Observado:** Na CAOP 2025, Porto usa `DTMN="1312"` e Bonfim usa
-`DTMNFR="131202"`. A GEO API PT observada anteriormente usa os mesmos valores
+**Observado:** Na CAOP 2025, Porto usa [`DTMN="1312"`](../code-dictionary.md#geoapi-municipality-1312) e Bonfim usa
+[`DTMNFR="131202"`](../code-dictionary.md#geoapi-parish-131202). A GEO API PT observada anteriormente usa os mesmos valores
 para Porto e Bonfim e declara CAOP 2024.1 como fonte cartográfica.
 
 **Observado:** No indicador INE anteriormente estudado sob NUTS 2013, Porto
-aparece com o geocódigo composto `11A1312`. Na CAOP 2025, `dtmn="1312"` e
-`nuts3_cod="11A"` são campos separados.
+aparece com o geocódigo composto [`11A1312`](../code-dictionary.md#ine-geography-11a1312). Na CAOP 2025, [`dtmn="1312"`](../code-dictionary.md#geoapi-municipality-1312) e
+[`nuts3_cod="11A"`](../code-dictionary.md#ine-geography-11a) são campos separados.
 
 **Limite da evidência:** Para este exemplo, versão e classificação, é possível
 relacionar os componentes publicados. Isto não autoriza uma regra genérica de
