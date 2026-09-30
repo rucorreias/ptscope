@@ -289,6 +289,14 @@ No SMI:
 após o limite HTTP 429. Campos como primeiro período, último período, precisão
 e lista completa de categorias ficam por confirmar antes da integração.
 
+### 6.5. Pesquisa pontual sobre `0012918` para v0.1 (30-09-2026)
+
+**Observado no catálogo oficial [dados.gov.pt](https://dados.gov.pt/pt/datasets/populacao-residente-n-o-64):** a entrada publicada pelo INE identifica `0012918` como «População residente (N.º) por Local de residência (NUTS - 2024), Sexo e Grupo etário; Anual - INE, Estimativas anuais da população residente» e remete para a [página do indicador no INE](https://www.ine.pt/xurl/indx/0012918/PT). O catálogo confirma a identidade e o título publicados; não fornece, nessa consulta, a lista completa de categorias nem observações municipais.
+
+**Limite da observação:** a consulta direta à metainformação JSON `pindicaMeta.jsp?varcd=0012918&lang=PT` não produziu resposta utilizável nesta investigação (timeout). Não foi feito download de dados, repetição intensiva nem comparação célula a célula. Períodos disponíveis, códigos de município, qualifiers, revisões, versão concreta da dimensão, e continuidade com `0008273` continuam **por confirmar diretamente no INE**. Um resultado de pesquisa indexado não substitui uma extração reproduzível.
+
+**Implicação em aberto para a investigação:** `0012918` é candidato a uma série separada para anos recentes; o PTScope não junta este indicador a `0008273` sem confrontar definições, metodologia, períodos e geografia. Ver [modelo conceptual do domínio](../../architecture/domain-model.md) e [issue #1](https://github.com/rucorreias/ptscope/issues/1).
+
 ## 7. Dimensões e categorias
 
 O JSON de metainformação contém `Dimensoes.Descricao_Dim` e a lista de
