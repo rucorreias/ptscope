@@ -122,6 +122,14 @@ def municipality_codes(meta: dict[str, Any]) -> set[str]:
     }
 
 
+def nonmunicipality_codes(meta: dict[str, Any]) -> set[str]:
+    return {
+        category["categ_cod"]
+        for category in flatten_categories(meta)
+        if category["dim_num"] == "2" and category.get("categ_nivel") != "5"
+    }
+
+
 def summarize_metadata(response: dict[str, Any]) -> dict[str, Any]:
     if "error" in response:
         return {"request": response, "error": response["error"]}
@@ -176,17 +184,24 @@ def data_rows(payload: dict[str, Any]) -> list[dict[str, Any]]:
 def summarize_observations(
     response: dict[str, Any],
     expected_municipality_codes: set[str],
+    known_nonmunicipality_codes: set[str],
 ) -> dict[str, Any]:
     if "error" in response:
         return {"request": response, "error": response["error"]}
 
     payload = response["json"][0]
     rows = data_rows(payload)
-    observed_municipality_codes = {
-        row["geocod"]
-        for row in rows
-        if row.get("geocod") in expected_municipality_codes
+    observed_geography_codes = {
+        str(row["geocod"]) for row in rows if row.get("geocod") is not None
     }
+    observed_municipality_codes = observed_geography_codes & expected_municipality_codes
+    # The response has no municipality-level field. Codes outside the metadata
+    # cannot safely be classified as municipalities.
+    unrecognised_geography_codes = (
+        observed_geography_codes
+        - expected_municipality_codes
+        - known_nonmunicipality_codes
+    )
     qualifier_fields = sorted(
         {
             key
@@ -218,9 +233,8 @@ def summarize_observations(
         "missing_municipality_count": len(
             expected_municipality_codes - observed_municipality_codes
         ),
-        "unexpected_municipality_count": len(
-            observed_municipality_codes - expected_municipality_codes
-        ),
+        "unrecognised_geography_count": len(unrecognised_geography_codes),
+        "unrecognised_geography_examples": sorted(unrecognised_geography_codes)[:10],
         "missing_municipality_examples": sorted(
             expected_municipality_codes - observed_municipality_codes
         )[:10],
@@ -235,15 +249,59 @@ def write_run(output: Path, run: dict[str, Any]) -> None:
     output.write_text(json.dumps(run, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def write_summary(output: Path, run: dict[str, Any]) -> None:
+    """Write a small per-period audit record; the full run remains separate."""
+    summary: dict[str, Any] = {
+        "queried_at_utc": run["queried_at_utc"],
+        "scope": run["scope"],
+        "indicators": {},
+    }
+    for indicator, result in run["indicators"].items():
+        metadata = result["metadata"]
+        periods = {
+            period["label"]: period["code"] for period in metadata.get("periods", [])
+        }
+        entries = []
+        for label, observation in result["observations_by_period"].items():
+            request = observation.get("request", {})
+            entries.append({
+                "period": label,
+                "period_code": periods.get(label),
+                "url": request.get("url"),
+                "status": request.get("status"),
+                "sha256": request.get("sha256"),
+                "row_count": observation.get("row_count"),
+                "expected_municipality_count": observation.get("expected_municipality_count"),
+                "observed_municipality_count": observation.get("observed_municipality_count"),
+                "missing_municipality_count": observation.get("missing_municipality_count"),
+                "unrecognised_geography_count": observation.get("unrecognised_geography_count"),
+                "rows_without_valor_count": observation.get("rows_without_valor_count"),
+                "qualifier_fields": observation.get("qualifier_fields"),
+                "data_extraction": observation.get("data_extraction"),
+                "last_update": observation.get("last_update"),
+                "error": observation.get("error"),
+            })
+        summary["indicators"][indicator] = {
+            "metadata_sha256": metadata.get("request", {}).get("sha256"),
+            "metadata_error": metadata.get("error"),
+            "periods": entries,
+        }
+    output.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="/tmp/ptscope_ine_population_scope.json")
+    parser.add_argument(
+        "--summary-output", default="/tmp/ptscope_ine_population_scope_summary.json"
+    )
     parser.add_argument("--delay", type=float, default=0.5)
     parser.add_argument("--timeout", type=float, default=20.0)
     parser.add_argument("--retries", type=int, default=1)
     args = parser.parse_args()
 
     output = Path(args.output)
+    summary_output = Path(args.summary_output)
     run: dict[str, Any] = {
         "queried_at_utc": datetime.now(timezone.utc).isoformat(),
         "scope": (
@@ -267,6 +325,7 @@ def main() -> None:
                 "observations_by_period": {},
             }
             write_run(output, run)
+            write_summary(summary_output, run)
             continue
 
         meta = meta_response["json"][0]
@@ -276,6 +335,7 @@ def main() -> None:
         }
         run["indicators"][indicator] = indicator_result
         write_run(output, run)
+        write_summary(summary_output, run)
         time.sleep(args.delay)
 
         for period_code, period_label in period_codes(meta):
@@ -294,12 +354,18 @@ def main() -> None:
                 args.delay,
             )
             indicator_result["observations_by_period"][period_label] = (
-                summarize_observations(data_response, municipality_codes(meta))
+                summarize_observations(
+                    data_response,
+                    municipality_codes(meta),
+                    nonmunicipality_codes(meta),
+                )
             )
             write_run(output, run)
+            write_summary(summary_output, run)
             time.sleep(args.delay)
 
     print(output)
+    print(summary_output)
 
 
 if __name__ == "__main__":

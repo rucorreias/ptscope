@@ -44,7 +44,10 @@ Fonte de referência: [estudo INE](sources/ine.md). O tipo de evidência refere-
 
 | Código | Significado neste contexto | Evidência |
 |---|---|---|
+| <a id="ine-period-s7a2011"></a>`S7A2011` | Categoria anual de 2011 do indicador [`0008273`](#ine-indicator-0008273). | Observado na validação municipal |
+| <a id="ine-period-s7a2021"></a>`S7A2021` | Categoria anual de 2021 observada em [`0008273`](#ine-indicator-0008273) e [`0012918`](#ine-indicator-0012918); cada indicador mantém a sua classificação geográfica. | Observado na validação municipal |
 | <a id="ine-period-s7a2023"></a>`S7A2023` | Categoria anual do indicador [`0008273`](#ine-indicator-0008273); a resposta guarda os dados sob a chave `2023`. | Observado |
+| <a id="ine-period-s7a2025"></a>`S7A2025` | Categoria anual de 2025 do indicador [`0012918`](#ine-indicator-0012918). | Observado na validação municipal |
 | <a id="ine-period-s3a202006"></a>`S3A202006` | Exemplo mensal retirado de uma fonte secundária antiga; a resposta usa a chave `202006`. Este formato ainda não está confirmado para todos os indicadores. | Histórico, fonte secundária |
 | <a id="ine-geography-pt"></a>`PT` | Categoria geográfica Portugal na hierarquia observada de 0008273. | Observado |
 | <a id="ine-geography-1"></a>`1` | Categoria geográfica Continente, NUTS I, na hierarquia de 0008273. | Observado |

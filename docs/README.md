@@ -5,6 +5,7 @@ O PTScope está a dar os primeiros passos. Já é possível consultar um municí
 - [Plano da v0.1](roadmap.md): o que falta fazer e em que ordem
 - [Dicionário de códigos](data/code-dictionary.md): o significado dos códigos encontrados na documentação
 - [Estudos das fontes](data/sources/): o que as APIs devolvem, com exemplos e limitações
+- [Conclusão da validação INE para a #1](data/validations/ine-population-2026-09-30.md): períodos verificados, limites da evidência e regra para a v0.1
 - [Modelo de domínio da v0.1](architecture/domain-model.md): o significado dos dados e as regras ainda por validar
 - [Regras de ingestão](architecture/data-ingestion.md): como o PTScope deve tratar os dados
 
