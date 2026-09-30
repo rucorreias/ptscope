@@ -476,3 +476,5 @@ Estas são implicações de modelação, não uma proposta final de tabelas ou E
    de atualização até obter confirmação documental.
 6. Modelar censos e restantes temas como dados temporais e provenientes de
    fontes específicas, não como propriedades permanentes do município.
+
+A [investigação da correspondência municipal INE ↔ GEO API PT](../validations/ine-geoapi-territory-2026-09-30.md) regista a amostra, as ligações ainda não aprovadas e o comportamento proposto para o mapa. Não altera as observações deste estudo.
