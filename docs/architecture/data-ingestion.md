@@ -69,6 +69,9 @@ Todos os códigos provenientes de fontes externas (identificadores territoriais,
 
 ## 5. Modelo Conceptual: Indicadores e Observações
 
+O [rascunho do modelo conceptual de domínio da v0.1](domain-model.md) aplica estas regras a observações INE e à informação territorial da GEO API PT. Distingue referências geográficas e extrações sem decidir ainda o contrato da API nem o esquema da base de dados.
+
+
 O PTScope adota a distinção conceptual entre a definição do dado e a sua ocorrência:
 
 - **Indicator:** Representa a definição estatística (metadados, unidade, periodicidade, fonte, metodologia).
