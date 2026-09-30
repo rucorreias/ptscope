@@ -13,7 +13,7 @@ Fonte de referência: [estudo INE](sources/ine.md). O tipo de evidência refere-
 | Código | Significado neste contexto | Evidência |
 |---|---|---|
 | <a id="ine-indicator-0008273"></a>`0008273` | População residente por sexo e grupo etário; série observada com NUTS 2013, até município. | Observado |
-| <a id="ine-indicator-0012918"></a>`0012918` | População residente por local de residência NUTS 2024, sexo e grupo etário; identificado no catálogo; metainformação JSON e comparabilidade por validar. | Documentado no catálogo |
+| <a id="ine-indicator-0012918"></a>`0012918` | População residente por local de residência NUTS 2024, sexo e grupo etário; série observada com períodos `2021`-`2025`, até município. Não juntar automaticamente a [`0008273`](#ine-indicator-0008273). | Observado |
 | <a id="ine-indicator-0010006"></a>`0010006` | Idade média ao óbito por sexo e causa de morte; cobertura observada até NUTS III. | Observado |
 | <a id="ine-indicator-0012910"></a>`0012910` | Índice de dependência de idosos; NUTS 2024. | Documentado |
 | <a id="ine-indicator-0012234"></a>`0012234` | Valor mediano das vendas de alojamentos, últimos 12 meses; trimestral. | Documentado |
@@ -29,6 +29,7 @@ Fonte de referência: [estudo INE](sources/ine.md). O tipo de evidência refere-
 | Código | Significado neste contexto | Evidência |
 |---|---|---|
 | <a id="ine-version-03505"></a>`03505` | Versão da dimensão de residência NUTS 2013 na metainformação JSON; no SMI aparece como V03505. | Observado |
+| <a id="ine-version-05257"></a>`05257` | Versão da dimensão de residência NUTS 2024 na metainformação JSON do indicador [`0012918`](#ine-indicator-0012918); no SMI aparece como V05257. | Observado |
 | <a id="ine-version-00305"></a>`00305` | Versão da dimensão sexo na metainformação JSON. | Observado |
 | <a id="ine-version-00708"></a>`00708` | Versão da dimensão grupo etário na metainformação JSON. | Observado |
 | <a id="ine-version-03622"></a>`03622` | Versão da dimensão causa de morte (lista OCDE adaptada) na metainformação JSON. | Observado |
@@ -50,6 +51,7 @@ Fonte de referência: [estudo INE](sources/ine.md). O tipo de evidência refere-
 | <a id="ine-geography-11"></a>`11` | Categoria geográfica Norte, NUTS II, na hierarquia de 0008273. | Observado |
 | <a id="ine-geography-11a"></a>`11A` | Categoria geográfica Área Metropolitana do Porto, NUTS III, na hierarquia de 0008273. | Observado |
 | <a id="ine-geography-11a1312"></a>`11A1312` | Porto na hierarquia NUTS 2013 do indicador [`0008273`](#ine-indicator-0008273). Não substituir automaticamente por [`1312`](#geoapi-municipality-1312). | Observado |
+| <a id="ine-geography-2004901"></a>`2004901` | Corvo em respostas filtradas dos indicadores [`0008273`](#ine-indicator-0008273) e [`0012918`](#ine-indicator-0012918). | Observado |
 | <a id="ine-sex-t"></a>`T` | Total/HM na dimensão sexo do indicador [`0008273`](#ine-indicator-0008273); noutra dimensão, `T` pode significar outra coisa. | Observado |
 | <a id="ine-sex-1"></a>`1` | Categoria H da dimensão sexo do indicador 0008273, distinta da categoria geográfica 1. | Observado |
 | <a id="ine-sex-2"></a>`2` | Categoria M da dimensão sexo do indicador 0008273. | Observado |
