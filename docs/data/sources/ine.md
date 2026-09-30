@@ -1002,3 +1002,189 @@ mais rica do que uma simples lista de valores. A integração segura depende de
 tratar dimensões, versões territoriais, qualificadores, proveniência e revisões
 como parte do dado. O principal risco não é o transporte JSON; é apagar
 significado estatístico durante a normalização.
+
+## 27. Validação v0.1: população municipal
+
+> Data da consulta: 30 de setembro de 2026, entre 20:26 e 20:31 Europe/Lisbon.
+> Objetivo: determinar que períodos e observações municipais de população
+> residente podem ser apresentados com segurança na v0.1, usando apenas o INE.
+
+Esta ronda responde à issue
+[`#1`](https://github.com/rucorreias/ptscope/issues/1). Os códigos usados aqui
+ficam também inventariados no
+[`docs/data/code-dictionary.md`](../code-dictionary.md).
+
+Foram lidos os documentos pedidos no `main` remoto atual:
+[`docs/architecture/domain-model.md`](../../architecture/domain-model.md),
+[`docs/architecture/data-ingestion.md`](../../architecture/data-ingestion.md) e
+[`docs/data/code-dictionary.md`](../code-dictionary.md). Esta ronda reconsulta
+diretamente o indicador `0012918`, que a secção 6.5 ainda deixava por confirmar
+por timeout.
+
+### 27.1. Script reproduzível
+
+Foi criado `tools/verify_ine_population_scope.py` para executar manualmente
+uma validação pequena e filtrada. O script não é chamado pelos testes normais e
+não deve correr em CI.
+
+Comando usado:
+
+```bash
+python3 tools/verify_ine_population_scope.py \
+  --output /tmp/ptscope_ine_population_scope.json \
+  --delay 0.75 \
+  --timeout 25 \
+  --retries 1
+```
+
+O script consulta apenas:
+
+- metainformação dos indicadores `0008273` e `0012918`;
+- para cada período publicado em cada indicador, observações com `Dim3=T`
+  (`HM`) e `Dim4=T` (`Total`), deixando a geografia aberta;
+- não consulta desagregações por sexo, idade ou catálogo integral.
+
+Numa repetição curta, dentro da sandbox, o acesso por DNS falhou para
+`www.ine.pt`. Fora da sandbox, a execução completa das 20 consultas filtradas
+respondeu com HTTP 200. Repetições posteriores com timeout mais curto
+confirmaram a instabilidade operacional: alguns pedidos antigos de `0008273`
+ficaram lentos e foram registados como timeout. Isto reforça que esta
+verificação deve continuar manual e separada da suite normal.
+
+### 27.2. Pedidos efetuados
+
+Metainformação:
+
+| Indicador | URL | Parâmetros | Estado | Bytes | SHA-256 observado |
+|---|---|---|---:|---:|---|
+| `0008273` | `https://www.ine.pt/ine/json_indicador/pindicaMeta.jsp` | `varcd=0008273`, `lang=PT` | 200 | 86028 | `fc245fdb5ffc2c3d9e9f9bb018537248332092489bde9fcedc574211d49f355b` |
+| `0012918` | `https://www.ine.pt/ine/json_indicador/pindicaMeta.jsp` | `varcd=0012918`, `lang=PT` | 200 | 84928 | `fccbf9c8800bffb66926522d7a968079cfa8eaa266438299987ab6bc3374f9ed` |
+
+Observações filtradas:
+
+```text
+endpoint: https://www.ine.pt/ine/json_indicador/pindica.jsp
+op=2
+varcd=<0008273|0012918>
+Dim1=<código anual S7A...>
+Dim3=T
+Dim4=T
+lang=PT
+```
+
+Exemplos mínimos de resposta:
+
+```json
+{
+  "geocod": "2004901",
+  "geodsg": "Corvo",
+  "dim_3": "T",
+  "dim_3_t": "HM",
+  "dim_4": "T",
+  "dim_4_t": "Total",
+  "ind_string": "389",
+  "valor": "389"
+}
+```
+
+```json
+{
+  "geocod": "2004901",
+  "geodsg": "Corvo",
+  "dim_3": "T",
+  "dim_3_t": "HM",
+  "dim_4": "T",
+  "dim_4_t": "Total",
+  "ind_string": "401",
+  "valor": "401"
+}
+```
+
+O primeiro exemplo é `0008273` em 2020; o segundo é `0008273`/`0012918` em
+2021. A igualdade da célula amostrada entre indicadores em 2021 é apenas uma
+observação pontual, não prova comparabilidade geral entre séries.
+
+### 27.3. Indicador `0008273`
+
+**Documentado/observado na metainformação oficial:**
+
+| Campo | Valor |
+|---|---|
+| Indicador | `0008273` |
+| Nome | População residente (N.º) por Local de residência (NUTS - 2013), Sexo e Grupo etário; Anual - INE, Estimativas anuais da população residente |
+| Periodicidade | Anual |
+| Primeiro / último período | `2011` / `2023` |
+| Unidade / potência / precisão | `Número (N.º)` / `0` / `0` |
+| Última atualização | `2026-07-17` |
+| Dimensão geográfica | Local de residência (NUTS - 2013), versão `03505` |
+| Sexo / grupo etário | versões `00305` / `00708` |
+
+A dimensão temporal contém os códigos `S7A2011` a `S7A2023`. A dimensão
+geográfica contém 344 categorias: 1 país, 3 NUTS I, 7 NUTS II, 25 NUTS III e
+308 municípios (`categ_nivel=5`).
+
+**Observado nas consultas filtradas:** uma execução completa devolveu HTTP 200
+para todos os períodos `2011`-`2023`. Em cada ano, a resposta HM/Total conteve
+344 linhas geográficas e os 308 códigos municipais esperados. Não foram
+observadas linhas municipais sem `valor`; não apareceram campos de qualificador
+como `sinal_conv` nas respostas filtradas. Isto não prova que desagregações por
+sexo ou grupo etário nunca tenham valores ausentes ou qualificados.
+
+**Quebra metodológica 2020-2021:** a nota oficial da dimensão temporal afirma
+que as estimativas a partir de 2021 são de base administrativa, enquanto as
+estimativas até 2020 são definitivas e assentes nos recenseamentos anteriores.
+A v0.1 pode mostrar a linha `2011`-`2023` para população municipal total, mas
+deve anotar explicitamente a quebra entre `2020` e `2021`.
+
+**Conclusão v0.1 para `0008273`:** é defensável apresentar, para cada
+município, população residente total (`Sexo=HM`, `Grupo etário=Total`) nos
+períodos `2011`-`2023`, preservando `valor`, `ind_string`, unidade,
+atualização da fonte, extração e parâmetros. A série deve permanecer
+identificada como NUTS 2013/CAOP 2020, sem conversão automática para outros
+referenciais.
+
+### 27.4. Indicador `0012918`
+
+**Documentado/observado na metainformação oficial:**
+
+| Campo | Valor |
+|---|---|
+| Indicador | `0012918` |
+| Nome | População residente (N.º) por Local de residência (NUTS - 2024), Sexo e Grupo etário; Anual - INE, Estimativas anuais da população residente |
+| Periodicidade | Anual |
+| Primeiro / último período | `2021` / `2025` |
+| Unidade / potência / precisão | `Número (N.º)` / `0` / `0` |
+| Última atualização | `2026-06-22` |
+| Dimensão geográfica | Local de residência (NUTS - 2024), versão `05257` |
+| Sexo / grupo etário | versões `00305` / `00708` |
+
+A dimensão temporal contém os códigos `S7A2021` a `S7A2025`. A dimensão
+geográfica contém 347 categorias: 1 país, 3 NUTS I, 9 NUTS II, 26 NUTS III e
+308 municípios.
+
+**Observado nas consultas filtradas:** os períodos `2021`-`2025` devolveram
+HTTP 200. Em cada ano, a resposta HM/Total conteve 347 linhas geográficas e os
+308 códigos municipais esperados. Não foram observadas linhas municipais sem
+`valor`; não apareceram campos de qualificador nas respostas filtradas.
+
+**Conclusão v0.1 para `0012918`:** o indicador é uma série separada e atual em
+NUTS 2024. Pode ser estudado e preservado como tal para `2021`-`2025`, mas não
+deve ser unido automaticamente a `0008273`. A sobreposição temporal e a
+semelhança de título não demonstram, por si só, que valores, geografia,
+metodologia e revisões sejam comparáveis em todos os municípios.
+
+### 27.5. O que ficou por confirmar
+
+- Uma tabela oficial de correspondência suficiente para ligar, célula a célula,
+  `0008273` NUTS 2013/version `03505` a `0012918` NUTS 2024/version `05257`.
+- Se o INE considera `0012918` sucessor direto de `0008273` para efeitos de
+  visualização contínua municipal.
+- Se existem qualificadores ou ausências em desagregações por sexo ou grupo
+  etário, uma vez que a validação v0.1 só consultou HM/Total.
+- A enumeração oficial completa dos qualificadores da API JSON.
+- Um identificador de revisão por observação. A API expôs data de última
+  atualização por indicador/resposta e data de extração, mas não versão por
+  célula.
+- Se as datas de atualização diferentes (`2026-07-17` em `0008273` e
+  `2026-06-22` em `0012918`) implicam revisões distintas nos períodos
+  sobrepostos.
